@@ -148,6 +148,7 @@ latexmk
 | `main.tex` | 設定、表紙に載る情報、概要、章の並び。**書き換えるのは主にここ** |
 | `body.tex` | 本文（序論〜結論） |
 | `guide.tex` | 執筆の手引き（堀田の指導方針）。書き終わったら `main.tex` の `\input{guide}` を外す |
+| `guide-only.tex` | 手引きだけを 1 冊の PDF にするためのファイル。`latexmk guide-only.tex` |
 | `thesis.bib` | 引用文献。NASA ADS の BibTeX をそのまま貼る |
 | `achilles.sty` | 共通プリアンブル |
 | `thesiscover.sty` | 表紙のレイアウト。通常は触らない |
@@ -160,6 +161,8 @@ latexmk
   `main.tex` の冒頭で切り替えられます。本文の `\citep{}` `\citet{}` は共通なので、
   あとから変えても原稿は書き直さなくて済みます。
 * **まず `guide.tex`（PDF では「修士論文を書くにあたって」の章）を読んでください。**
+  手引きだけを読みたいときは `latexmk guide-only.tex` で単体の PDF になります。
+  GitHub Actions が作ったものを Artifacts から落としても構いません。
   イントロは最後に書くこと、結論をイントロに対応させること、図は印刷して確かめること、
   単位や添字の約束、引用と剽窃、AI との付き合い方、添削の受け方をまとめてあります。
 
@@ -196,6 +199,24 @@ latexmk && mv main.pdf 期末テスト_解答例.pdf
 `\yokakunin{...}` の未確認事項マーカーを用意してあります。
 
 ---
+
+## GitHub Actions
+
+`main` に push すると、`.github/workflows/build.yml` が
+
+1. `common/` と各テンプレートがずれていないか検査し（`sync-common.sh --check`）
+2. TeX Live の Docker イメージで 4 つの PDF を作り
+3. Artifacts として残します
+
+作られるのは `thesis/main.pdf`、`thesis/guide-only.pdf`、`exam/main.pdf`、`note/main.pdf` の
+4 つです。Actions の実行結果のページの一番下、**Artifacts** から落とせます。
+
+目的は 2 つあります。TeX を入れていない人でも PDF を読めるようにすることと、
+**TeX Live が上がったときや誰かがプリアンブルを触ったときに、壊れたことを
+push の時点で知る**ことです。手元だけで確認していると、
+「学生の環境で通らない」にあとから気づくことになります。
+
+手動で走らせたいときは Actions のページの **Run workflow** から実行できます。
 
 ## 困ったとき
 

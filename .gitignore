@@ -25,6 +25,7 @@ comment.cut
 
 # 出来上がった PDF は履歴に入れない（fig/ の図は残す）
 /thesis/main.pdf
+/thesis/guide-only.pdf
 /exam/main.pdf
 /note/main.pdf
 main-diff*.tex

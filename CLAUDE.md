@@ -91,6 +91,26 @@ guide.tex にも README にも詳細を複製しない**（二重管理は腐る
 `main.tex` / `body.tex` / `guide.tex` / `thesis.bib` + sty 2 つだけ。
 プリアンブルと表紙情報も `main.tex` に入れてある。
 
+### GitHub Actions で 4 つの PDF を作る（2026-08-29 追加）
+
+当初は入れない判断だったが、本人の希望で追加した。
+`.github/workflows/build.yml` が `sync-common.sh --check` →
+`texlive/texlive:latest` の Docker で 4 つの PDF をビルド → artifact、をやる。
+
+* ランナーに apt で TeX Live を入れるのではなく `docker run` にしているのは、
+  `actions/checkout` をホスト側の git で確実に動かすため
+  （`container:` にすると texlive イメージに git がある保証がない）。
+* `paths` フィルタを付けてあるので、README だけ直したときは走らない。
+* private repo でも無料枠 2000 分/月に対して 1 回 5 分程度なので問題にならない。
+
+**手引きだけの PDF (`guide-only.pdf`) の作り方**：`guide.tex` は `\chapter` なので
+単体ではコンパイルできない。プリアンブルを複製したくないので、
+`thesis/guide-only.tex` は `\def\GuideOnly{}` してから `\input{main}` するだけの
+3 行のファイルにしてある。`main.tex` 側は `\ifdefined\GuideOnly` で
+表紙・概要・本文・付録・謝辞を飛ばし、簡単な扉と目次と `\input{guide}` だけを出す。
+引用文献はどちらの経路でも出す（guide の中で引用しているため）。
+`\documentclass` の前に `\def` を置くのは合法。
+
 ## 実装上のはまりどころ（再発防止）
 
 * **`newtxmath` と `amssymb` は併用できない。** `\Bbbk` が二重定義になって止まる。

@@ -1,0 +1,58 @@
+# リポジトリの状態で必ずコンパイルが通ることを確かめ、できた PDF を残します。
+#
+# 目的は 2 つあります。
+#   1. 回帰検査。TeX Live が上がったときや、誰かがプリアンブルを触ったときに、
+#      壊れたことを push の時点で知る。手元だけだと「学生の環境で通らない」に
+#      あとから気づくことになります。
+#   2. TeX を入れていない人でも PDF を読めるようにする。
+#      Actions の実行結果のページの Artifacts から落とせます。
+#
+# 手元で同じことをするには、各ディレクトリで latexmk と打つだけです。
+
+name: build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'thesis/**'
+      - 'exam/**'
+      - 'note/**'
+      - 'common/**'
+      - 'tools/**'
+      - '.github/workflows/build.yml'
+  pull_request:
+  workflow_dispatch:      # Actions のページから手動でも動かせる
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # common/ が原本で、各テンプレートにあるのはコピー。
+      # 原本だけ直して sync-common.sh を忘れる事故を、ここで止めます。
+      - name: common/ と各テンプレートがずれていないか
+        run: ./tools/sync-common.sh --check
+
+      # TeX Live は Docker イメージをそのまま使います。
+      # ランナーに apt で入れるより速く、手元の TeX Live と版が揃います。
+      - name: PDF を作る
+        run: |
+          docker run --rm -v "$PWD:/work" -w /work texlive/texlive:latest \
+            sh -eux -c '
+              cd thesis && latexmk && latexmk guide-only.tex && cd ..
+              cd exam   && latexmk && cd ..
+              cd note   && latexmk && cd ..
+            '
+
+      - name: できた PDF を残す
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf
+          path: |
+            thesis/main.pdf
+            thesis/guide-only.pdf
+            exam/main.pdf
+            note/main.pdf
+          if-no-files-found: error

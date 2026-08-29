@@ -133,6 +133,30 @@
 %% ===========================================================================
 \begin{document}
 
+%% ===========================================================================
+%%  手引きだけの PDF を作るとき（guide-only.tex から読まれたとき）
+%%  ここは通り道が違うだけで、設定も文献も本編とまったく同じものを使います。
+%%      latexmk guide-only.tex
+%% ===========================================================================
+\ifdefined\GuideOnly
+\frontmatter
+\thispagestyle{empty}
+\vspace*{5\zw}
+\begin{center}
+  {\LARGE 修士論文を書くにあたって\par}
+  \vspace{2\zw}
+  {\large 名古屋大学宇宙地球環境研究所\par}
+  \vspace{0.5\zw}
+  {\large 堀田 英之\par}
+  \vspace{1\zw}
+  {\large \today\par}
+\end{center}
+\clearpage
+\tableofcontents
+\mainmatter
+\input{guide}
+\else
+
 %% --- 前付け（ページ番号がローマ数字になる） -------------------------------
 \frontmatter
 
@@ -191,7 +215,10 @@
 %% （例：スーパーコンピュータ「富岳」、ひので、SDO など）。使う前に確認すること。
 \todo{書く}
 
+\fi   % ← \ifdefined\GuideOnly の終わり
+
 %% --- 引用文献 -------------------------------------------------------------
+%% 手引きだけの PDF でも文献は出す（guide の中で引用しているため）。
 \ifdefined\BibStyleBiblatex
   \printbibliography[title={引用文献}]
 \else
