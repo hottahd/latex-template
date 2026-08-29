@@ -46,14 +46,17 @@ if [ ! -f "$conf" ]; then
 # このファイルはリポジトリの外にあります（public にしても漏れないように）。
 #
 # OVERLEAF_GIT_BASE
-#   Overleaf の git のアドレス。学内から直接つなぐならそのまま。
-#   学外から SSH トンネル越しに使うなら http://git@localhost:8098/git にする。
+#   Overleaf の git のアドレス。http://git@<ホスト:ポート>/git の形です。
+#   学内から直接つなぐなら研究室サーバーのアドレス、
+#   学外から SSH トンネル越しに使うなら http://git@localhost:8098/git。
+#   プロジェクトを開いて左端の Integrations のアイコンを押すと、
+#   clone 用の URL がそのまま出ます。
 #
 # <名前>_PROJECT_ID
 #   Overleaf でプロジェクトを開き、左端の Integrations（統合）のアイコンを
 #   押すと出てくる clone 用 URL の、末尾の英数字です。
 
-OVERLEAF_GIT_BASE=http://git@10.104.37.26:8098/git
+OVERLEAF_GIT_BASE=
 
 thesis_PROJECT_ID=
 exam_PROJECT_ID=
@@ -74,7 +77,11 @@ if [ -z "$project_id" ]; then
   exit 1
 fi
 
-url="${OVERLEAF_GIT_BASE:-http://git@10.104.37.26:8098/git}/$project_id"
+if [ -z "${OVERLEAF_GIT_BASE:-}" ]; then
+  echo "$conf に OVERLEAF_GIT_BASE が書かれていません。" >&2
+  exit 1
+fi
+url="$OVERLEAF_GIT_BASE/$project_id"
 work="$cache/$name"
 
 # ---- Overleaf 側を手元に用意する ------------------------------------------
