@@ -215,12 +215,7 @@ AI をどう使ったか、何がうまくいったかは、ぜひ教えてく�
 
 原稿の添削は研究室の Overleaf の中で完結します。
 メールで \texttt{.tex} を往復させる必要はありません。
-使い方は別に案内があるので、そちらを見てください。
-
-\begin{center}
-  \href{https://thersacjp.sharepoint.com/:fl:/r/contentstorage/CSP_bf6a81ab-dd88-4f9a-a72b-ea5357190249/%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88%20%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA/LoopAppData/%E7%A0%94%E7%A9%B6%E5%AE%A4%20Overleaf%20%E5%88%A9%E7%94%A8%E6%A1%88%E5%86%85.loop?d=w026e1fb325f8479ead603b3a59b407aa&csf=1&web=1&e=MwFEpX&nav=cz0lMkZjb250ZW50c3RvcmFnZSUyRkNTUF9iZjZhODFhYi1kZDg4LTRmOWEtYTcyYi1lYTUzNTcxOTAyNDkmZD1iJTIxcTRGcXY0amRtay1uSy1wVFZ4a0NTWGJzMl9GdEI3dEppTEIzQ2VCZXZIcTZRblhfOHZIQVJMWUZyeXVGT1UzWCZmPTAxQ1lMR04zVlRENVhBRjZCRlRaRDIyWUIzSEpNM0lCNUsmYz0lMkYmYT1Mb29wQXBwJnA9JTQwZmx1aWR4JTJGbG9vcC1wYWdlLWNvbnRhaW5lciZ4PSU3QiUyMnclMjIlM0ElMjJUMFJUVUh4MGFHVnljMkZqYW5BdWMyaGhjbVZ3YjJsdWRDNWpiMjE4WWlGeE5FWnhkalJxWkcxckxXNUxMWEJVVm5oclExTllZbk15WDBaMFFqZDBTbWxNUWpORFpVSmxka2h4TmxGdVdGODRka2hCVWt4WlJuSjVkVVpQVlROWWZEQXhRMWxNUjA0elVqTlJWMU5FVmtGSFRrcEtRa3BWVTBoUlZFcFBTa00yVUVFJTNEJTIyJTJDJTIyaSUyMiUzQSUyMjNjYzcyYjY1LWYyNzEtNDkzOS1hMWY3LTQ2MTQ2N2UzMTE4YyUyMiU3RA%3D%3D}%
-       {研究室 Overleaf 利用案内（MS Loop）}
-\end{center}
+使い方は研究グループの Loop に案内があるので、そちらを見てください。
 
 \subsection{執筆計画}
 
@@ -284,8 +279,10 @@ NASA ADS の \textsf{Export Citation} から \textsf{BibTeX} を選べば、そ�
 番号をつけて後で参照する式は \texttt{align}、参照しない式は \texttt{align*} を使います。
 \verb|$$ ... $$| は使わないでください（前後の空きがおかしくなります）。
 ベクトルは \verb|\bm{B}| と書くと太字斜体になります（\texttt{bm} パッケージ）。
-\verb|\grad|、\verb|\divergence|、\verb|\curl|、\verb|\pdif{}{}| などの
-短縮マクロを \texttt{achilles.sty} に用意してあります。
+それ以外に独自のコマンドは用意していません。
+\verb|\nabla\cdot| や \verb|\frac{\partial f}{\partial x}| を
+そのまま書いてください。ここだけで通じる書き方を覚えても、
+他所で論文を書くときには使えないためです。
 
 \subsection{よくあるつまずき}
 

@@ -103,28 +103,9 @@
 % \todo{...} は赤い [TODO: ...] として本文に出る。消し忘れ防止のため目立たせている。
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
 
-% ベクトルは bm パッケージの \bm{B} をそのまま使う。
-% 独自のラッパーを作ると、他所で論文を書くときに使えないため。
-
-% ベクトル解析
-\newcommand{\grad}{\nabla}
-\newcommand{\divergence}{\nabla\cdot}
-\newcommand{\curl}{\nabla\times}
-\newcommand{\lap}{\nabla^2}
-
-% 微分
-\newcommand{\dd}{\mathrm{d}}
-\newcommand{\diff}[2]{\frac{\dd #1}{\dd #2}}
-\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
-\newcommand{\pdifn}[3]{\frac{\partial^{#3} #1}{\partial #2^{#3}}}
-
-% 天体・分野でよく出るもの
-\newcommand{\Msunsym}{M_\odot}
-\newcommand{\Rsunsym}{R_\odot}
-\newcommand{\eg}{e.g.}
-\newcommand{\ie}{i.e.}
-
-% 単位を立体で書くための短縮（siunitx を使わない場合）
-\newcommand{\unitsym}[1]{\,\mathrm{#1}}
+% 数式の記法には独自のコマンドを作りません。
+% \nabla\cdot や \frac{\partial f}{\partial x} をそのまま書いてください。
+% ここだけで通じる書き方を覚えても、他所で論文を書くときには使えないためです。
+% ベクトルは bm パッケージの \bm{B} を使います。
 
 \endinput
