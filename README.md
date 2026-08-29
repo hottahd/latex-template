@@ -29,7 +29,7 @@ latexmk -C       # 中間ファイルと PDF を消す
 
 `latexmk` にファイル名を渡すときは、`\documentclass` を持っているファイルを
 指定してください。`thesis/` では `main.tex` と `guide-only.tex` の 2 つだけです。
-`body.tex`、`guide.tex`、`preamble.tex` は断片なので単体では組めません
+`guide.tex` と `preamble.tex` は断片なので単体では組めません
 （間違えて叩いても、その旨のメッセージを出して止まるようにしてあります）。
 
 `thesis/` `exam/` `note/` はそれぞれ独立していて、他のディレクトリに依存しません。
@@ -152,8 +152,7 @@ latexmk
 
 | ファイル | 中身 |
 |---|---|
-| `main.tex` | 表紙に載る情報、概要、章の並び |
-| `body.tex` | 本文（序論〜結論） |
+| `main.tex` | 表紙に載る情報、アブストラクト、本文 |
 | `thesis.bib` | 引用文献。NASA ADS の BibTeX をそのまま貼る |
 | `fig/` | 図 |
 

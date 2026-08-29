@@ -6,12 +6,12 @@
 %%  とすれば main.pdf ができます（-pvc をつけると保存のたびに作り直す）。
 %%  Overleaf では Menu -> Settings -> Compiler を LuaLaTeX にしてください。
 %%
-%%  自分用に書き換えるのは、このファイルと body.tex と thesis.bib だけです。
+%%  自分用に書き換えるのは、このファイルと thesis.bib と fig/ だけです。
 %%
 %%    書き換えるもの
-%%      main.tex        このファイル。表紙に載る情報、概要、章の並び
-%%      body.tex        本文（序論〜結論）
+%%      main.tex        このファイル。表紙に載る情報、アブストラクト、本文
 %%      thesis.bib      引用文献
+%%      fig/            図
 %%
 %%    触る必要のないもの
 %%      preamble.tex    パッケージと設定。余白や文献の形式を変えるときだけ
@@ -93,7 +93,195 @@
 %% --- 本文（ページ番号がアラビア数字に戻る） -------------------------------
 \mainmatter
 
-\input{body}
+%% ===========================================================================
+%%  ここから本文
+%%
+%%  章が増えて 1 ファイルが扱いにくくなったら、章ごとにファイルを分けて
+%%  \input{introduction} のように読み込むこともできます。
+%%  最初のうちは 1 ファイルのほうが全体を見渡しやすいはずです。
+%% ===========================================================================
+
+\chapter{イントロダクション}
+\label{chap:introduction}
+
+%% 序論の役割は「なぜこの研究をやる必要があったのか」を読者に納得させることです。
+%% 次の順で書くと形になります。
+%%   1. 大きな背景（太陽・恒星の何が面白いか）
+%%   2. これまでに分かっていること（先行研究のレビュー、必ず引用をつける）
+%%   3. まだ分かっていないこと（先行研究の限界。ここが一番大事）
+%%   4. 本研究の目的（3 を受けて、何をするのか）
+%%   5. 本論文の構成（第 2 章では…、第 3 章では…）
+%% 「面白いから」だけでは読む人が納得しにくいので、
+%% 「ここが分かっていないから」まで書けると強いです。
+
+\section{太陽対流と磁場}
+\label{sec:intro_convection}
+
+太陽の内部は、中心から約 $0.7\,R_\odot$ より外側が対流層になっている。
+対流はエネルギーを外向きに運ぶと同時に、差動回転と子午面循環を駆動し、
+それらがダイナモ機構を通じて 11 年周期の磁場を生み出している
+\citep{charbonneau2020}。
+
+\section{先行研究}
+\label{sec:intro_previous}
+
+%% レビューは「誰が何をやったか」の羅列ではなく、
+%% 「この分野の理解がどう進んできたか」の物語として書きます。
+%% 引用は \citep{} と \citet{} を使い分けます。
+%%   \citep{hotta2021}  ->（Hotta et al. 2021）  文の最後に添えるとき
+%%   \citet{hotta2021}  -> Hotta et al.（2021）  主語にするとき
+高解像度の大局的計算が可能になったことで、対流層の乱流構造が詳しく調べられてきた。
+\citet{hotta2021} は小スケールダイナモが対流の有効粘性を下げ、
+太陽に近い差動回転が再現されることを示した。
+
+\section{本研究の目的}
+\label{sec:intro_purpose}
+
+\todo{先行研究で残された問題と、それに対して本研究が何をするのかを書く}
+
+\section{本論文の構成}
+\label{sec:intro_outline}
+
+第\ref{chap:method}章では本研究で用いたモデルを述べる。
+第\ref{chap:results}章で結果を示し、第\ref{chap:discussion}章で議論する。
+第\ref{chap:conclusion}章は結論である。
+
+
+\chapter{モデル}
+\label{chap:method}
+
+%% 「他人が読んで同じことを再現できるか」が唯一の判断基準です。
+%% 数値計算なら：基礎方程式、境界条件、初期条件、解像度、計算領域、
+%%              使ったコードとそのバージョン、計算機環境。
+%% 観測なら    ：装置、観測日時、露出、較正の手順、使ったソフトのバージョン。
+%% 「標準的な手法を用いた」で済ませないでください。何が標準かは 10 年で変わります。
+
+\section{基礎方程式}
+\label{sec:method_equations}
+
+本研究では磁気流体力学（MHD）方程式を解く。
+連続の式、運動方程式、誘導方程式はそれぞれ
+%% 番号を後で参照する式は align、参照しない式は align* を使います。
+\begin{align}
+  \frac{\partial \rho}{\partial t} &= -\nabla\cdot(\rho\bm{v}), \label{eq:continuity}\\
+  \frac{\partial (\rho\bm{v})}{\partial t}
+    &= -\nabla\cdot(\rho\bm{v}\bm{v})
+       - \nabla p + \rho\bm{g}
+       + \frac{1}{4\pi}(\nabla\times\bm{B})\times\bm{B}, \label{eq:motion}\\
+  \frac{\partial \bm{B}}{\partial t} &= \nabla\times(\bm{v}\times\bm{B}) \label{eq:induction}
+\end{align}
+である。ここで $\rho$ は密度、$\bm{v}$ は速度、$p$ は圧力、
+$\bm{B}$ は磁場、$\bm{g}$ は重力加速度である。
+式\eqref{eq:induction}では磁気拡散を無視した。
+
+\section{計算設定}
+\label{sec:method_setup}
+
+\todo{計算領域、解像度、境界条件、初期条件をまとめる}
+
+%% 表は booktabs を使うと縦罫線なしの読みやすい形になります。
+%% 表のキャプションは表の「上」に置きます。
+\begin{table}[tb]
+  \centering
+  \caption{数値計算の設定。}
+  \label{tab:setup}
+  \begin{tabular}{lll}
+    \toprule
+    項目 & 値 & 備考 \\
+    \midrule
+    計算領域   & $0.71\,R_\odot \le r \le 0.96\,R_\odot$ & 対流層 \\
+    格子数     & $512\times1024\times2048$               & $(r,\theta,\phi)$ \\
+    回転角速度 & \qty{2.6e-6}{\per\second}               & 太陽の値 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\chapter{結果}
+\label{chap:results}
+
+%% 結果の章では「何が見えたか」だけを書きます。解釈は次の章です。
+%% ただし機械的に図の説明を並べるのではなく、
+%% 読者が図を見る順番を自分が案内するつもりで書いてください。
+%% 図は必ず本文から \ref{} で参照します。本文から触れていない図があったら、
+%% その図は要らないか、本文に書き忘れているかのどちらかです。
+
+\section{対流構造}
+\label{sec:results_convection}
+
+\todo{得られた結果を書く}
+
+%% 図のキャプションは図の「下」に置きます。
+\begin{figure}[tb]
+  \centering
+  \includegraphics[width=0.7\linewidth]{sample.pdf}
+  \caption{図の説明。キャプションだけを読んで何の図か分かるように書くこと。
+    軸の量と単位、線や色が何を表すか、どの計算・観測のものかを含める。}
+  \label{fig:sample}
+\end{figure}
+
+図\ref{fig:sample}に\todo{何を示した図か}を示す。
+
+%% 図を横に並べて (a) (b) と番号を振る例。subcaption パッケージを使う。
+\begin{figure}[tb]
+  \centering
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth]{sample.pdf}
+    \caption{低解像度}
+    \label{fig:comp_low}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth]{sample.pdf}
+    \caption{高解像度}
+    \label{fig:comp_high}
+  \end{subfigure}
+  \caption{解像度による対流構造の違い。個々の図は
+    図\ref{fig:comp_low}、図\ref{fig:comp_high} のように参照できる。}
+  \label{fig:comp}
+\end{figure}
+
+
+\chapter{議論}
+\label{chap:discussion}
+
+%% 議論の章でやることは 3 つです。
+%%   1. 結果の解釈：なぜそうなったのかを物理で説明する
+%%   2. 先行研究との比較：一致するのか、しないのか。しないならなぜか
+%%   3. 限界：この研究で言えないことは何か
+%% 3 を書くのを怖がらないでください。限界を自分で把握できていることは
+%% 減点ではなく加点になります。
+
+\section{結果の解釈}
+\label{sec:discussion_interpretation}
+
+\todo{書く}
+
+\section{先行研究との比較}
+\label{sec:discussion_comparison}
+
+\todo{書く}
+
+\section{本研究の限界}
+\label{sec:discussion_limitation}
+
+\todo{書く}
+
+
+\chapter{結論}
+\label{chap:conclusion}
+
+%% 結論は「まとめ」ではなく、序論で立てた問いに対する答えを短く言い切る場所です。
+%% 新しい図やデータはここでは出しません。
+%% 最後に今後の展望を 1 段落だけ書きます。
+
+本研究では\todo{何をしたか}を行った。その結果、以下のことが分かった。
+
+\begin{enumerate}
+  \item \todo{結論 1}
+  \item \todo{結論 2}
+\end{enumerate}
+
+今後は\todo{展望}が課題である。
 
 %% 執筆の手引き。自分の原稿が形になったら、この行をコメントアウトする。
 \input{guide}

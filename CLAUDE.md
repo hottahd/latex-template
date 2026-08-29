@@ -120,7 +120,7 @@ guide.tex にも README にも詳細を複製しない**（二重管理は腐る
 消すと `preamble.tex` のほうが主文書と判定されかねない。
 片面印刷への切り替え行でもあるので、1 行だけ残すのが安全。
 
-`body.tex` / `guide.tex` / `preamble.tex` の先頭には、単体で `latexmk` に
+`guide.tex` / `preamble.tex` の先頭には、単体で `latexmk` に
 渡されたときに一度だけメッセージを出して止まるガードを入れてある
 （`\ifdefined\chapter\else ... \stop \fi`）。
 これがないと `nullfont` の Missing character が数千行出たあとに落ちる。
@@ -139,7 +139,7 @@ guide.tex にも README にも詳細を複製しない**（二重管理は腐る
   条件分岐が噛み合わない。`thesiscover.sty` では条件分岐を表の外で完結させ、
   空欄の判定は `\thc@line` で `\par` 区切りにしている。
 * **`latexmk` は引数なしだとディレクトリ内の全 `.tex` を組もうとする。**
-  `body.tex` 単体でエラーになるので `latexmkrc` に
+  `guide.tex` 単体でエラーになるので `latexmkrc` に
   `@default_files = ('main.tex');` を書いてある。
 * **BibTeX は `%` 始まりの行をコメントとして飛ばさない。** `.bib` のコメントに
   アットマークを含む文字列を書くと、そこから新しい項目が始まったと誤解される。
