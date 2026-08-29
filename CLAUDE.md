@@ -27,16 +27,16 @@
 
 ### ディレクトリごとに自己完結させている
 
-`common/achilles.sty` と `common/latexmkrc` が原本で、`tools/sync-common.sh` が
+`common/hh-template.sty` と `common/latexmkrc` が原本で、`tools/sync-common.sh` が
 `thesis/` `exam/` `note/` に**実体をコピー**する。シンボリックリンクではない。
 
 理由：Overleaf のプロジェクトは 1 文書 = 1 プロジェクトなので、学生は
-`thesis/` の中身だけを zip で上げる。`\usepackage{../common/achilles}` や
+`thesis/` の中身だけを zip で上げる。`\usepackage{../common/hh-template}` や
 `TEXINPUTS` を前提にすると、そこで破綻する。Windows のシンボリックリンクも避けたい。
 
 重複は `tools/sync-common.sh --check` で検出する。
 
-### 共通 sty の名前は `achilles`
+### 共通 sty の名前は `hh-template`
 
 `hottastyle` のような名乗りは避けたいという本人の希望。TeX Live に同名パッケージなし。
 
@@ -154,7 +154,7 @@ guide.tex にも README にも詳細を複製しない**（二重管理は腐る
 ## 実装上のはまりどころ（再発防止）
 
 * **`newtxmath` と `amssymb` は併用できない。** `\Bbbk` が二重定義になって止まる。
-  `achilles.sty` では `amssymb` を読まない。読み込み順は
+  `hh-template.sty` では `amssymb` を読まない。読み込み順は
   `amsmath` → `mathtools` → `fontenc` → `newtxtext` → `newtxmath` → `bm`。
 * **`\mathscr` は `newtxmath` が持っている。** `mathrsfs.sty` は 5/7/10pt しか
   なく、和文クラスの 10.5pt でサイズ置換の警告を出し続けるので読まない。

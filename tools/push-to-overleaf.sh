@@ -16,14 +16,13 @@
 # 認証は Overleaf の Git トークンです。
 # トークンは Overleaf の Account Settings で発行します（一度しか表示されません）。
 #
+# Terminal.app から実行してください。初回だけ聞かれて、あとはキーチェーンが覚えます。
+#
 # macOS のキーチェーンは、GUI のセッション以外から読み書きしようとすると
 #     failed to get: -25308 / failed to store: -25308
 # を返して失敗します（エディタや自動化ツールの中で開いたシェルなど）。
-# Terminal.app から実行すれば通ります。どこからでも動かしたいなら
-# ~/.netrc に書いておくのが確実です。
-#
-#     printf 'machine <Overleaf のホスト>\n  login git\n  password <トークン>\n' >> ~/.netrc
-#     chmod 600 ~/.netrc
+# そこからも使いたい場合は ~/.netrc に資格情報を置く方法がありますが、
+# トークンが平文で残るので、共有の計算機では避けてください。
 
 set -eu
 
@@ -103,7 +102,7 @@ if [ -d "$work/.git" ]; then
     echo >&2
     echo "Overleaf への接続に失敗しました。" >&2
     echo "  failed to get: -25308 と出ているなら、キーチェーンが読めていません。" >&2
-    echo "  Terminal.app から実行するか、~/.netrc に書いてください（冒頭の説明を参照）。" >&2
+    echo "  Terminal.app から実行してください（冒頭の説明を参照）。" >&2
     exit 1
   fi
   br=$(git -C "$work" rev-parse --abbrev-ref HEAD)

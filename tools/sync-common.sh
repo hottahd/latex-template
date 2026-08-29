@@ -11,7 +11,7 @@
 set -eu
 
 root=$(cd "$(dirname "$0")/.." && pwd)
-files="achilles.sty latexmkrc"
+files="hh-template.sty latexmkrc"
 targets="thesis exam note"
 
 check=0

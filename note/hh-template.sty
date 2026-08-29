@@ -1,6 +1,6 @@
-%% achilles.sty --- 堀田グループ LaTeX テンプレート共通プリアンブル
+%% hh-template.sty --- 堀田グループ LaTeX テンプレート共通プリアンブル
 %%
-%%   *** このファイルの原本は common/achilles.sty です ***
+%%   *** このファイルの原本は common/hh-template.sty です ***
 %%   thesis/ exam/ note/ にあるものはコピーです。編集したら
 %%       ./tools/sync-common.sh
 %%   を実行して配り直してください（tools/sync-common.sh --check でずれを検査）。
@@ -9,17 +9,17 @@
 %% 組み合わせて使います。uplatex や platex では動きません。
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{achilles}[2026/08/28 v1.0 Hotta group common preamble for LuaLaTeX]
+\ProvidesPackage{hh-template}[2026/08/28 v1.0 Hotta group common preamble for LuaLaTeX]
 
 %% ---------------------------------------------------------------------------
 %% オプション
-%%   nogeometry : 余白を achilles 側で設定しない（自分で geometry を書くとき）
+%%   nogeometry : 余白を hh-template 側で設定しない（自分で geometry を書くとき）
 %%   nohyperref : hyperref を読み込まない（順序を自分で制御したいとき）
 %% ---------------------------------------------------------------------------
-\newif\ifach@geometry \ach@geometrytrue
-\newif\ifach@hyperref \ach@hyperreftrue
-\DeclareOption{nogeometry}{\ach@geometryfalse}
-\DeclareOption{nohyperref}{\ach@hyperreffalse}
+\newif\ifhht@geometry \hht@geometrytrue
+\newif\ifhht@hyperref \hht@hyperreftrue
+\DeclareOption{nogeometry}{\hht@geometryfalse}
+\DeclareOption{nohyperref}{\hht@hyperreffalse}
 \ProcessOptions\relax
 
 %% ---------------------------------------------------------------------------
@@ -80,7 +80,7 @@
 %% ---------------------------------------------------------------------------
 %% 余白
 %% ---------------------------------------------------------------------------
-\ifach@geometry
+\ifhht@geometry
   \RequirePackage[margin=25truemm]{geometry}
 \fi
 
@@ -89,7 +89,7 @@
 %%   LuaLaTeX では日本語のしおりがそのまま通るので pxjahyper は不要です。
 %%   紙で提出するときは colorlinks=false にすると文字が黒くなります。
 %% ---------------------------------------------------------------------------
-\ifach@hyperref
+\ifhht@hyperref
   \RequirePackage[unicode,colorlinks=true,allcolors=blue,pdfencoding=auto]{hyperref}
   \RequirePackage{url}
 \fi
