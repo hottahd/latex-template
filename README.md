@@ -92,15 +92,20 @@ latexmk
 
 ## Overleaf で書く
 
-ローカルに TeX を入れられないときは Overleaf でも使えます。
+修士論文は研究室の Overleaf で書き、添削もその中で完結させます。
+アクセス方法・アカウント・添削の流れは、別に配ってある
+**「研究室 Overleaf 利用案内」**（MS Loop）を見てください。ここでは重複させません。
+
+テンプレートを Overleaf に持っていく手順は次のとおりです。
 
 1. 使いたいディレクトリ（例：`thesis/`）の**中身**を zip にまとめる。
    リポジトリ全体ではなく、そのディレクトリの中身だけにすること。
-2. Overleaf で **New Project → Upload Project** から zip を上げる。
+2. **New Project → Upload Project** から zip を上げる。
 3. **Menu → Settings → Compiler** を **LuaLaTeX** に変える。ここが一番忘れやすい。
 4. **Main document** が `main.tex` になっていることを確認する。
 
-GitHub と連携する場合も、Compiler の設定は同じです。
+添削を頼むときは、その版に `review-hotta` のようなラベルを付けて連絡します。
+`latexdiff` で差分の PDF を作る必要はありません。
 
 ---
 
@@ -142,7 +147,7 @@ GitHub と連携する場合も、Compiler の設定は同じです。
 |---|---|
 | `main.tex` | 設定、表紙に載る情報、概要、章の並び。**書き換えるのは主にここ** |
 | `body.tex` | 本文（序論〜結論） |
-| `guide.tex` | 執筆の手引き。書き終わったら `main.tex` の `\input{guide}` を外す |
+| `guide.tex` | 執筆の手引き（堀田の指導方針）。書き終わったら `main.tex` の `\input{guide}` を外す |
 | `thesis.bib` | 引用文献。NASA ADS の BibTeX をそのまま貼る |
 | `achilles.sty` | 共通プリアンブル |
 | `thesiscover.sty` | 表紙のレイアウト。通常は触らない |
@@ -154,8 +159,9 @@ GitHub と連携する場合も、Compiler の設定は同じです。
 * 参考文献は `biblatex + biber`（既定）と `natbib + plainnat` を
   `main.tex` の冒頭で切り替えられます。本文の `\citep{}` `\citet{}` は共通なので、
   あとから変えても原稿は書き直さなくて済みます。
-* まず `guide.tex`（PDF では「執筆の手引き」の章）を読んでください。
-  文章の書き方、図の作り方、引用と剽窃、添削の受け方をまとめてあります。
+* **まず `guide.tex`（PDF では「修士論文を書くにあたって」の章）を読んでください。**
+  イントロは最後に書くこと、結論をイントロに対応させること、図は印刷して確かめること、
+  単位や添字の約束、引用と剽窃、AI との付き合い方、添削の受け方をまとめてあります。
 
 ---
 
