@@ -116,6 +116,13 @@ guide.tex にも README にも詳細を複製しない**（二重管理は腐る
   `actions/checkout` をホスト側の git で確実に動かすため
   （`container:` にすると texlive イメージに git がある保証がない）。
 * `paths` フィルタを付けてあるので、README だけ直したときは走らない。
+* できた PDF は **GitHub Pages** に置く（`site/` を組み立てて
+  `upload-pages-artifact` → `deploy-pages`）。artifact は URL が実行ごとに変わり、
+  ログインが要り、90 日で消えるので、学生に渡すリンクには使えない。
+  **Settings -> Pages の Source を「GitHub Actions」にする設定が一度だけ要る。**
+  private のあいだは公開されない。
+  `thesis/main.tex` の冒頭が手引きの URL を指しているので、
+  Pages を止めるならそこも直すこと。
 * private repo でも無料枠 2000 分/月に対して 1 回 5 分程度なので問題にならない。
 
 **手引きだけの PDF (`guide-only.pdf`)**：`guide-only.tex` は `main.tex` とは別の、

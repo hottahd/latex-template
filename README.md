@@ -235,10 +235,18 @@ latexmk && mv main.pdf 期末テスト_解答例.pdf
 
 1. `common/` と各テンプレートがずれていないか検査し（`sync-common.sh --check`）
 2. TeX Live の Docker イメージで 4 つの PDF を作り
-3. Artifacts として残します
+3. **GitHub Pages に置きます**
 
-作られるのは `thesis/main.pdf`、`thesis/guide-only.pdf`、`exam/main.pdf`、`note/main.pdf` の
-4 つです。Actions の実行結果のページの一番下、**Artifacts** から落とせます。
+できた PDF はここから読めます。TeX を入れていない人にも URL で渡せます。
+
+* <https://hottahd.github.io/latex-template/>
+* 執筆の手引き … <https://hottahd.github.io/latex-template/guide-only.pdf>
+
+Actions の実行結果のページの **Artifacts** からも落とせます（Pull Request のときはこちらだけ）。
+
+> **Pages を使うには、リポジトリの Settings → Pages で Source を
+> 「GitHub Actions」にしておく必要があります**（一度だけ）。
+> リポジトリが private のあいだは公開されません。
 
 目的は 2 つあります。TeX を入れていない人でも PDF を読めるようにすることと、
 **TeX Live が上がったときや誰かがプリアンブルを触ったときに、壊れたことを

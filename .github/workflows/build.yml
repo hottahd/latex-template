@@ -1,11 +1,17 @@
-# リポジトリの状態で必ずコンパイルが通ることを確かめ、できた PDF を残します。
+# リポジトリの状態で必ずコンパイルが通ることを確かめ、できた PDF を GitHub Pages に置きます。
 #
 # 目的は 2 つあります。
 #   1. 回帰検査。TeX Live が上がったときや、誰かがプリアンブルを触ったときに、
 #      壊れたことを push の時点で知る。手元だけだと「学生の環境で通らない」に
 #      あとから気づくことになります。
-#   2. TeX を入れていない人でも PDF を読めるようにする。
-#      Actions の実行結果のページの Artifacts から落とせます。
+#   2. TeX を入れていない人が PDF を読めるようにする。
+#      とくに執筆の手引き（guide-only.pdf）は、学生に URL で渡したいので。
+#
+#        https://hottahd.github.io/latex-template/
+#
+# ★ Pages を使うには、リポジトリの Settings -> Pages で
+#    Source を「GitHub Actions」にしておく必要があります（一度だけ）。
+#    private のままだと Pages は公開されません。
 #
 # 手元で同じことをするには、各ディレクトリで latexmk と打つだけです。
 
@@ -23,6 +29,17 @@ on:
       - '.github/workflows/build.yml'
   pull_request:
   workflow_dispatch:      # Actions のページから手動でも動かせる
+
+# Pages に置くために必要な権限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時に走ると Pages の更新がぶつかるので、1 本ずつにする
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -46,13 +63,65 @@ jobs:
               cd note   && latexmk && cd ..
             '
 
+      # 公開するページを組み立てる
+      - name: ページを組み立てる
+        run: |
+          mkdir -p site
+          cp thesis/main.pdf       site/thesis.pdf
+          cp thesis/guide-only.pdf site/guide-only.pdf
+          cp exam/main.pdf         site/exam.pdf
+          cp note/main.pdf         site/note.pdf
+          cat > site/index.html <<'HTML'
+          <!DOCTYPE html>
+          <html lang="ja">
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>latex-template - 堀田グループ</title>
+          <style>
+            body { font-family: system-ui, sans-serif; line-height: 1.8;
+                   max-width: 42rem; margin: 3rem auto; padding: 0 1.5rem; }
+            h1 { font-size: 1.4rem; }
+            li { margin: .6rem 0; }
+            .note { color: #555; font-size: .9rem; }
+          </style>
+          <h1>latex-template（堀田グループ）</h1>
+          <p>修士論文・試験・ノートの LaTeX テンプレートです。
+             下の PDF は、リポジトリの最新の状態から自動で作られています。</p>
+          <ul>
+            <li><a href="guide-only.pdf">修士論文を書くにあたって</a>
+                <span class="note">— 書き始める前に読んでください</span></li>
+            <li><a href="thesis.pdf">修士論文テンプレートの見本</a></li>
+            <li><a href="exam.pdf">試験テンプレートの見本</a></li>
+            <li><a href="note.pdf">ノートテンプレートの見本</a></li>
+          </ul>
+          <p class="note">
+            テンプレート本体は
+            <a href="https://github.com/hottahd/latex-template">GitHub</a> にあります。
+            修士論文は研究室 Overleaf の New Project → Templates から始められます。
+          </p>
+          </html>
+          HTML
+
       - name: できた PDF を残す
         uses: actions/upload-artifact@v4
         with:
           name: pdf
-          path: |
-            thesis/main.pdf
-            thesis/guide-only.pdf
-            exam/main.pdf
-            note/main.pdf
+          path: site/*.pdf
           if-no-files-found: error
+
+      - name: Pages 用に上げる
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
