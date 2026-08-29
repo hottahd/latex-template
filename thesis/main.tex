@@ -4,6 +4,16 @@
 %%  このテンプレートは MIT License です。自由に使ってください。
 %%  https://github.com/hottahd/latex-template
 %%
+%%  ★ 書き始める前に「修士論文を書くにあたって」を読んでください。
+%%     イントロダクションは最後に書く、図は印刷して確かめる、といった
+%%     堀田からの申し送りです。中身は guide.tex、PDF はこう作ります。
+%%
+%%         latexmk guide-only.tex          → guide-only.pdf（10 ページ）
+%%
+%%     Overleaf なら Menu -> Settings -> Main document を一時的に
+%%     guide-only.tex にすれば読めます（読み終わったら main.tex に戻す）。
+%%     論文の本文には入らないので、消し忘れの心配は要りません。
+%%
 %%  エンジンは LuaLaTeX です。このディレクトリで
 %%      latexmk
 %%  とすれば main.pdf ができます（-pvc をつけると保存のたびに作り直す）。
@@ -21,8 +31,8 @@
 %%      preamble.tex    パッケージと設定。余白や文献の形式を変えるときだけ
 %%      achilles.sty    全テンプレート共通のプリアンブル
 %%      thesiscover.sty 表紙のレイアウト
-%%      guide.tex       執筆の手引き。本文には入りません
-%%      guide-only.tex  手引きを PDF にするためのもの（latexmk guide-only.tex）
+%%      guide.tex       執筆の手引きの中身（上の ★ を見てください）
+%%      guide-only.tex  手引きを PDF にするためのもの
 %%
 %%  卒業論文に使うときは、下の \thesistype を「卒業論文」に変えます。
 %% ===========================================================================
