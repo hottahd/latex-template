@@ -110,14 +110,15 @@ jobs:
           if-no-files-found: error
 
       - name: Pages 用に上げる
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        # push（main のみ）と手動実行のとき。Pull Request では公開しない。
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
