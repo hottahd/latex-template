@@ -162,7 +162,14 @@ LuaLaTeX の compiler 設定はテンプレートから引き継がれること�
 * 接続先は **repo の外**（`~/.config/latex-template/overleaf.conf`）。
   public にしたときに学内アドレスとプロジェクト ID を出さないため。
 * 送ったあと、テンプレートへの反映は手動（Overleaf で一度コンパイル →
-  Menu → Manage template）。**コンパイル済みでないとメニューが押せない。**
+  Menu → **Publish as a Template**）。**コンパイル済みでないとメニューが押せない。**
+  更新も同じ項目。`version` が上がり、中身が焼き直される。
+  ソースの `manage-template-modal` という名前に引きずられて「Manage template」と
+  書いていたが、UI にその文字列は出ない（メニューもモーダルの題も
+  `t('publish_as_template')`）。
+* **メタデータの Edit（テンプレートのページから）と、中身の焼き直しは別物。**
+  Edit は名前・ライセンス・説明を書き換えるだけで `version` は上がらず、
+  プロジェクト側の変更は反映されない。
 
 ### CE+ のテンプレートギャラリーは既定で無効
 

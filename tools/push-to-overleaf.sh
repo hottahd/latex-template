@@ -158,6 +158,6 @@ echo
 echo "テンプレートに反映するには、Overleaf 側でもう一手あります。"
 echo "  1. Overleaf でこのプロジェクトを開く"
 echo "  2. 一度コンパイルする（成功していないと次のメニューが押せません）"
-echo "  3. Menu -> Manage template でテンプレートを更新する"
+echo "  3. Menu -> Publish as a Template で公開し直す（更新もこの項目）"
 echo
 echo "すでに学生が作ったプロジェクトには反映されません（それでよいはずです）。"
