@@ -84,15 +84,15 @@
 連続の式、運動方程式、誘導方程式はそれぞれ
 %% 番号を後で参照する式は align、参照しない式は align* を使います。
 \begin{align}
-  \pdif{\rho}{t} &= -\divergence(\rho\vect{v}), \label{eq:continuity}\\
-  \pdif{(\rho\vect{v})}{t}
-    &= -\divergence(\rho\vect{v}\vect{v})
-       - \grad p + \rho\vect{g}
-       + \frac{1}{4\pi}(\curl\vect{B})\times\vect{B}, \label{eq:motion}\\
-  \pdif{\vect{B}}{t} &= \curl(\vect{v}\times\vect{B}) \label{eq:induction}
+  \pdif{\rho}{t} &= -\divergence(\rho\bm{v}), \label{eq:continuity}\\
+  \pdif{(\rho\bm{v})}{t}
+    &= -\divergence(\rho\bm{v}\bm{v})
+       - \grad p + \rho\bm{g}
+       + \frac{1}{4\pi}(\curl\bm{B})\times\bm{B}, \label{eq:motion}\\
+  \pdif{\bm{B}}{t} &= \curl(\bm{v}\times\bm{B}) \label{eq:induction}
 \end{align}
-である。ここで $\rho$ は密度、$\vect{v}$ は速度、$p$ は圧力、
-$\vect{B}$ は磁場、$\vect{g}$ は重力加速度である。
+である。ここで $\rho$ は密度、$\bm{v}$ は速度、$p$ は圧力、
+$\bm{B}$ は磁場、$\bm{g}$ は重力加速度である。
 式\eqref{eq:induction}では磁気拡散を無視した。
 
 \section{計算設定}

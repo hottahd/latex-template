@@ -91,7 +91,9 @@
 紙の上で読めるかどうかが基準です。
 
 読めなければ、図を作る段階に戻って文字を大きくします。
-\verb|\includegraphics[width=0.5\linewidth]| のように後から縮めると文字も一緒に縮むので、その分を見越して作ってください。図の目盛りの字は特に小さくなりがちです。
+\verb|\includegraphics| に \verb|width=0.5\linewidth| のように指定して
+後から縮めると文字も一緒に縮むので、その分を見越して作ってください。
+図の目盛りの字は特に小さくなりがちです。
 
 どのくらいにすればよいか分からなければ、堀田の論文の図を見てください。
 例えば \citet{hotta2022} の図が参考になります。
@@ -104,7 +106,7 @@
 
 \subsection{キャプション}
 
-キャプションだけを読んで何の図かが分かる必要はありますが、\textbf{長すぎるキャプションは、読解を妨げますので、必要十分にとどめましょう}。軸の量と単位、線や色が何を表すか、どの計算のものか。これらが分かる最小限で書いてください。特に、異なる図の間で線種がおなじ意味を持つ場合(例えば磁場入りの計算は赤、磁場なしは青と決める)は、凡例には毎回示すことは必要ですが、毎回キャプションに書く必要はありません。最初の図で説明すれば十分です。また、異なる図の間で、同じ色が使われるように注意しましょう。例えば、ある図で赤が磁場入りの計算を表すなら、次の図でも赤は磁場入りの計算を表すようにします。
+キャプションだけを読んで何の図かが分かる必要はありますが、\textbf{長すぎるキャプションは、読解を妨げますので、必要十分にとどめましょう}。軸の量と単位、線や色が何を表すか、どの計算のものか。これらが分かる最小限で書いてください。特に、異なる図の間で線種が同じ意味を持つ場合(例えば磁場入りの計算は赤、磁場なしは青と決める)は、凡例には毎回示すことは必要ですが、毎回キャプションに書く必要はありません。最初の図で説明すれば十分です。また、異なる図の間で、同じ色が使われるように注意しましょう。例えば、ある図で赤が磁場入りの計算を表すなら、次の図でも赤は磁場入りの計算を表すようにします。
 
 \subsection{形式}
 
@@ -134,7 +136,9 @@
 \end{verbatim}
 
 \noindent
-と書けば、空きは自動的に正しくなります。論文全体でどちらかに統一してください。
+と書けば、空きは自動的に正しくなります。
+従来どおり \verb|$2~\mathrm{km~s^{-1}}$| と手で書いても構いませんが、
+論文全体でどちらかに統一してください。
 
 \subsection{イタリック体とローマン体}
 
@@ -214,9 +218,9 @@ AI をどう使ったか、何がうまくいったかは、ぜひ教えてく�
 使い方は別に案内があるので、そちらを見てください。
 
 \begin{center}
- \url{https://thersacjp.sharepoint.com/:fl:/r/contentstorage/CSP_bf6a81ab-dd88-4f9a-a72b-ea5357190249/%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88%20%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA/LoopAppData/%E7%A0%94%E7%A9%B6%E5%AE%A4%20Overleaf%20%E5%88%A9%E7%94%A8%E6%A1%88%E5%86%85.loop?d=w026e1fb325f8479ead603b3a59b407aa&csf=1&web=1&e=MwFEpX&nav=cz0lMkZjb250ZW50c3RvcmFnZSUyRkNTUF9iZjZhODFhYi1kZDg4LTRmOWEtYTcyYi1lYTUzNTcxOTAyNDkmZD1iJTIxcTRGcXY0amRtay1uSy1wVFZ4a0NTWGJzMl9GdEI3dEppTEIzQ2VCZXZIcTZRblhfOHZIQVJMWUZyeXVGT1UzWCZmPTAxQ1lMR04zVlRENVhBRjZCRlRaRDIyWUIzSEpNM0lCNUsmYz0lMkYmYT1Mb29wQXBwJnA9JTQwZmx1aWR4JTJGbG9vcC1wYWdlLWNvbnRhaW5lciZ4PSU3QiUyMnclMjIlM0ElMjJUMFJUVUh4MGFHVnljMkZqYW5BdWMyaGhjbVZ3YjJsdWRDNWpiMjE4WWlGeE5FWnhkalJxWkcxckxXNUxMWEJVVm5oclExTllZbk15WDBaMFFqZDBTbWxNUWpORFpVSmxka2h4TmxGdVdGODRka2hCVWt4WlJuSjVkVVpQVlROWWZEQXhRMWxNUjA0elVqTlJWMU5FVmtGSFRrcEtRa3BWVTBoUlZFcFBTa00yVUVFJTNEJTIyJTJDJTIyaSUyMiUzQSUyMjNjYzcyYjY1LWYyNzEtNDkzOS1hMWY3LTQ2MTQ2N2UzMTE4YyUyMiU3RA%3D%3D}
-
- \end{center}
+  \href{https://thersacjp.sharepoint.com/:fl:/r/contentstorage/CSP_bf6a81ab-dd88-4f9a-a72b-ea5357190249/%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88%20%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA/LoopAppData/%E7%A0%94%E7%A9%B6%E5%AE%A4%20Overleaf%20%E5%88%A9%E7%94%A8%E6%A1%88%E5%86%85.loop?d=w026e1fb325f8479ead603b3a59b407aa&csf=1&web=1&e=MwFEpX&nav=cz0lMkZjb250ZW50c3RvcmFnZSUyRkNTUF9iZjZhODFhYi1kZDg4LTRmOWEtYTcyYi1lYTUzNTcxOTAyNDkmZD1iJTIxcTRGcXY0amRtay1uSy1wVFZ4a0NTWGJzMl9GdEI3dEppTEIzQ2VCZXZIcTZRblhfOHZIQVJMWUZyeXVGT1UzWCZmPTAxQ1lMR04zVlRENVhBRjZCRlRaRDIyWUIzSEpNM0lCNUsmYz0lMkYmYT1Mb29wQXBwJnA9JTQwZmx1aWR4JTJGbG9vcC1wYWdlLWNvbnRhaW5lciZ4PSU3QiUyMnclMjIlM0ElMjJUMFJUVUh4MGFHVnljMkZqYW5BdWMyaGhjbVZ3YjJsdWRDNWpiMjE4WWlGeE5FWnhkalJxWkcxckxXNUxMWEJVVm5oclExTllZbk15WDBaMFFqZDBTbWxNUWpORFpVSmxka2h4TmxGdVdGODRka2hCVWt4WlJuSjVkVVpQVlROWWZEQXhRMWxNUjA0elVqTlJWMU5FVmtGSFRrcEtRa3BWVTBoUlZFcFBTa00yVUVFJTNEJTIyJTJDJTIyaSUyMiUzQSUyMjNjYzcyYjY1LWYyNzEtNDkzOS1hMWY3LTQ2MTQ2N2UzMTE4YyUyMiU3RA%3D%3D}%
+       {研究室 Overleaf 利用案内（MS Loop）}
+\end{center}
 
 \subsection{執筆計画}
 
@@ -279,7 +283,7 @@ NASA ADS の \textsf{Export Citation} から \textsf{BibTeX} を選べば、そ�
 
 番号をつけて後で参照する式は \texttt{align}、参照しない式は \texttt{align*} を使います。
 \verb|$$ ... $$| は使わないでください（前後の空きがおかしくなります）。
-ベクトルは \verb|\vect{B}| と書くと太字斜体になります。
+ベクトルは \verb|\bm{B}| と書くと太字斜体になります（\texttt{bm} パッケージ）。
 \verb|\grad|、\verb|\divergence|、\verb|\curl|、\verb|\pdif{}{}| などの
 短縮マクロを \texttt{achilles.sty} に用意してあります。
 

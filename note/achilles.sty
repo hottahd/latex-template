@@ -103,9 +103,10 @@
 % \todo{...} は赤い [TODO: ...] として本文に出る。消し忘れ防止のため目立たせている。
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
 
-% ベクトル・テンソル
-\newcommand{\vect}[1]{\bm{#1}}
-\newcommand{\uvect}[1]{\bm{e}_{#1}}          % \uvect{\phi} -> e_phi
+% ベクトルは bm パッケージの \bm{B} をそのまま使う。
+% 独自のラッパーを作ると、他所で論文を書くときに使えないため。
+
+% ベクトル解析
 \newcommand{\grad}{\nabla}
 \newcommand{\divergence}{\nabla\cdot}
 \newcommand{\curl}{\nabla\times}
