@@ -1,13 +1,13 @@
 # latex-template
 
 堀田グループの LaTeX テンプレート集です。修士論文・卒業論文、講義の試験、
-研究ノートの 3 つを同じ書き方・同じコマンドで作れるようにしてあります。
+まとまったノートの 3 つを、同じ書き方・同じコマンドで作れるようにしてあります。
 
 | ディレクトリ | 用途 | クラス |
 |---|---|---|
 | `thesis/` | 修士論文・卒業論文 | `ltjsbook` |
 | `exam/`   | 試験・小テスト（問題用と解答例つきを切り替え） | `ltjarticle` |
-| `note/`   | 研究ノート・講義ノート | `ltjsarticle` |
+| `note/`   | 講義ノート・手法の解説など、まとまった文書 | `ltjarticle` |
 
 **エンジンは LuaLaTeX です。`platex` や `uplatex` では動きません。**
 TeX Live（MacTeX）さえ入れれば Mac / Windows / Linux のどれでも同じ PDF が出ます。
@@ -126,8 +126,16 @@ Overleaf でプロジェクトを開いて**一度コンパイルし**、
 
 接続先（プロジェクト ID と学内アドレス）は、このリポジトリではなく
 `~/.config/latex-template/overleaf.conf` に置いています。
-初回だけ Overleaf の Git 認証トークンを聞かれます
-（Account Settings で発行。表示は一度きり。ユーザー名は `git`）。
+
+認証は Overleaf の Git トークンです（Account Settings で発行。表示は一度きり）。
+macOS のキーチェーンは GUI のセッション以外から読めず、
+エディタや自動化ツールの中のシェルから走らせると `failed to get: -25308` になります。
+`~/.netrc` に書いておくと、どこからでも通ります。
+
+```sh
+printf 'machine <Overleaf のホスト>\n  login git\n  password <トークン>\n' >> ~/.netrc
+chmod 600 ~/.netrc
+```
 
 ---
 
@@ -149,15 +157,19 @@ Overleaf でプロジェクトを開いて**一度コンパイルし**、
 
 `latexmkrc` も同じ仕組みで配っています。
 
-主なマクロ:
+**数式の記法には独自のコマンドを作っていません。** `\nabla\cdot` や
+`\frac{\partial f}{\partial x}` はそのまま書いてください。
+ここだけで通じる書き方を覚えても、他所で論文を書くときに使えないためです。
+ベクトルは `bm` パッケージの `\bm{B}` を使います。
+
+用意してあるのは、執筆中の目印と、siunitx の単位だけです。
 
 | 書き方 | 出るもの |
 |---|---|
-| `\vect{B}` | 太字斜体のベクトル |
-| `\grad` `\divergence` `\curl` `\lap` | ∇ 系の演算子 |
-| `\pdif{f}{x}` `\diff{f}{x}` | 偏微分・常微分 |
+| `\red{...}` `\blue{...}` | 色をつける |
+| `\todo{...}` | 赤い `[TODO: ...]`。提出前に grep して消す |
 | `\qty{700}{Mm}` `\unit{\km\per\second}` | 単位つきの数値（siunitx） |
-| `\red{...}` `\todo{...}` | 執筆中の目印。提出前に grep して消す |
+| `\Msun` `\Rsun` `\Lsun` `\erg` `\gauss` | siunitx にない単位を足したもの |
 
 ---
 
@@ -189,11 +201,12 @@ Overleaf でプロジェクトを開いて**一度コンパイルし**、
 * 参考文献は `biblatex + biber`（既定）と `natbib + plainnat` を
   `main.tex` の冒頭で切り替えられます。本文の `\citep{}` `\citet{}` は共通なので、
   あとから変えても原稿は書き直さなくて済みます。
-* **まず `guide.tex`（PDF では「修士論文を書くにあたって」の章）を読んでください。**
-  手引きだけを読みたいときは `latexmk guide-only.tex` で単体の PDF になります。
-  GitHub Actions が作ったものを Artifacts から落としても構いません。
+* **まず「修士論文を書くにあたって」を読んでください。**
+  <https://hottahd.github.io/latex-template/guide-only.pdf>
   イントロは最後に書くこと、結論をイントロに対応させること、図は印刷して確かめること、
   単位や添字の約束、引用と剽窃、AI との付き合い方、添削の受け方をまとめてあります。
+  論文の本文には入らないので、消し忘れの心配は要りません。
+  手元で作るなら `latexmk guide-only.tex` です。
 
 ---
 
@@ -223,9 +236,14 @@ latexmk && mv main.pdf 期末テスト_解答例.pdf
 
 ## ノートを書く人へ
 
-`note/main.tex` は 1 ファイルで完結しています。
-定義・定理・例・注意の環境と、`\begin{memo}[見出し]` の覚え書き用の箱、
-`\yokakunin{...}` の未確認事項マーカーを用意してあります。
+講義ノートや手法の解説のように、**一つの話題をまとまった形で書き切る文書**のための
+テンプレートです。日々の研究ノートではありません。
+
+`note/main.tex` は 1 ファイルで完結しています。`\maketitle` → `\tableofcontents` →
+`\section` の連なりで、数式・図・表の書き方の実例だけを置いてあります。
+節が増えたら `\input{advection}` のように分けられます。
+
+---
 
 ---
 
@@ -244,9 +262,8 @@ latexmk && mv main.pdf 期末テスト_解答例.pdf
 
 Actions の実行結果のページの **Artifacts** からも落とせます（Pull Request のときはこちらだけ）。
 
-> **Pages を使うには、リポジトリの Settings → Pages で Source を
-> 「GitHub Actions」にしておく必要があります**（一度だけ）。
-> リポジトリが private のあいだは公開されません。
+> Pages は Settings → Pages の Source を「GitHub Actions」にして有効にしてあります。
+> 作り直すときは、この設定とリポジトリが public であることの両方が要ります。
 
 目的は 2 つあります。TeX を入れていない人でも PDF を読めるようにすることと、
 **TeX Live が上がったときや誰かがプリアンブルを触ったときに、壊れたことを
@@ -254,6 +271,8 @@ push の時点で知る**ことです。手元だけで確認していると、
 「学生の環境で通らない」にあとから気づくことになります。
 
 手動で走らせたいときは Actions のページの **Run workflow** から実行できます。
+
+---
 
 ## ライセンス
 
@@ -263,6 +282,8 @@ MIT License（`LICENSE`）。自由に使ってください。改変も再配布
 Creative Commons CC BY 4.0 / LaTeX Project Public License 1.3c / Other の 3 つしか
 ないので、**Other (as stated in the work)** を選んでいます。実際のライセンスは
 この `LICENSE` に書いてあるものです。
+
+---
 
 ## 困ったとき
 
