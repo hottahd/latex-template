@@ -13,11 +13,23 @@
 # に置きます。リポジトリを public にしても学内のアドレスが漏れないようにするためです。
 # 初回に実行すると、書き方を入れた雛形を作ります。
 #
-# 認証は Overleaf の Git トークンです。初回だけ git が聞いてきます。
-# macOS なら osxkeychain に覚えられるので、二度目からは聞かれません。
+# 認証は Overleaf の Git トークンです。
 # トークンは Overleaf の Account Settings で発行します（一度しか表示されません）。
+#
+# macOS のキーチェーンは、GUI のセッション以外から読み書きしようとすると
+#     failed to get: -25308 / failed to store: -25308
+# を返して失敗します（エディタや自動化ツールの中で開いたシェルなど）。
+# Terminal.app から実行すれば通ります。どこからでも動かしたいなら
+# ~/.netrc に書いておくのが確実です。
+#
+#     printf 'machine <Overleaf のホスト>\n  login git\n  password <トークン>\n' >> ~/.netrc
+#     chmod 600 ~/.netrc
 
 set -eu
+
+# 注意: 日本語の直後に変数を置くときは必ず ${var} と波括弧を付けること。
+# macOS の /bin/sh (bash 3.2) は "$sha）" の全角括弧の 1 バイト目を
+# 変数名の一部と解釈して、set -u で unbound variable になる。
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 conf="${XDG_CONFIG_HOME:-$HOME/.config}/latex-template/overleaf.conf"
@@ -87,7 +99,13 @@ work="$cache/$name"
 # ---- Overleaf 側を手元に用意する ------------------------------------------
 if [ -d "$work/.git" ]; then
   echo "==> Overleaf 側の最新を取得 ($name)"
-  git -C "$work" fetch --quiet origin
+  if ! git -C "$work" fetch --quiet origin; then
+    echo >&2
+    echo "Overleaf への接続に失敗しました。" >&2
+    echo "  failed to get: -25308 と出ているなら、キーチェーンが読めていません。" >&2
+    echo "  Terminal.app から実行するか、~/.netrc に書いてください（冒頭の説明を参照）。" >&2
+    exit 1
+  fi
   br=$(git -C "$work" rev-parse --abbrev-ref HEAD)
   git -C "$work" reset --hard --quiet "origin/$br"
 else
@@ -153,7 +171,7 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 git commit --quiet -m "latex-template $sha の $name/ を反映"
 git push --quiet origin "$branch"
 
-echo "==> 送りました（latex-template $sha）"
+echo "==> 送りました（latex-template ${sha}）"
 echo
 echo "テンプレートに反映するには、Overleaf 側でもう一手あります。"
 echo "  1. Overleaf でこのプロジェクトを開く"

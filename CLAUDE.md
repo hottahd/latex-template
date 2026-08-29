@@ -204,6 +204,15 @@ LuaLaTeX の compiler 設定はテンプレートから引き継がれること�
 `Features.hasFeature('templates-server-pro')` が false になって
 **管理者でもメニューに出ない**。2026-08-29 に研究室サーバーで有効化済み。
 
+### push-to-overleaf.sh の落とし穴（実際に踏んだ）
+
+* **日本語の直後の変数は必ず `${var}` にする。** macOS の `/bin/sh` は bash 3.2 で、
+  `"$sha）"` の全角括弧の 1 バイト目を変数名の一部と解釈し、`set -u` で
+  `sha?: unbound variable` になって落ちる。半角の記号なら起きないので気づきにくい。
+* **キーチェーンは GUI セッション以外から読めない。** エディタや自動化ツールの中で
+  開いたシェルから走らせると `failed to get: -25308` になる。
+  Terminal.app から実行するか、`~/.netrc` に書く。
+
 ## ビルドが不可解に失敗するとき
 
 `TEXINPUTS` や `BIBINPUTS` に個人用のスタイルファイル置き場を通していると、
