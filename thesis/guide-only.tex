@@ -3,9 +3,47 @@
 %%
 %%      latexmk guide-only.tex
 %%
-%%  中身は main.tex をそのまま読んでいます。設定も引用文献も本編と同じものを
-%%  使うので、guide.tex を直せばこちらにも自動で反映されます。
+%%  main.tex とは独立した文書です。設定だけを同じ preamble.tex から読んでいるので、
+%%  本編と同じ組版・同じ参考文献の形式になります。
+%%  guide.tex を直せば、本編にもこちらにも反映されます。
+%%
 %%  GitHub Actions がこれを使って guide-only.pdf を作っています。
 %% ===========================================================================
-\def\GuideOnly{}
-\input{main}
+
+%% 配って読んでもらうものなので、白紙のページが入らないよう片面にする。
+\documentclass[a4paper,11pt,oneside]{ltjsbook}
+
+\input{preamble}
+
+\begin{document}
+
+\frontmatter
+\thispagestyle{empty}
+\vspace*{5\zw}
+\begin{center}
+  {\LARGE 修士論文を書くにあたって\par}
+  \vspace{2\zw}
+  {\large 名古屋大学宇宙地球環境研究所\par}
+  \vspace{0.5\zw}
+  {\large 堀田 英之\par}
+  \vspace{1\zw}
+  {\large \today\par}
+\end{center}
+\clearpage
+
+\tableofcontents
+
+\mainmatter
+\input{guide}
+
+%% 引用文献。main.tex の末尾と同じものです。
+%% どちらの方式を使うかは preamble.tex の冒頭で決めています。
+\ifdefined\BibStyleBiblatex
+  \printbibliography[title={引用文献}]
+\else
+  \renewcommand{\bibname}{引用文献}
+  \bibliographystyle{plainnat}
+  \bibliography{thesis}
+\fi
+
+\end{document}

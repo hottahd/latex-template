@@ -1,0 +1,103 @@
+% !TEX root = main.tex
+
+% ---------------------------------------------------------------------------
+% このファイルは単体ではコンパイルできません（\documentclass がない、設定の断片です）。
+% 間違えて latexmk preamble.tex としたときに、
+% 何千行もエラーを出す前に止めるための仕掛けです。
+% ---------------------------------------------------------------------------
+\ifdefined\chapter\else
+  \errmessage{^^J
+   ================================================================^^J
+   preamble.tex is a fragment. It cannot be compiled on its own.^^J
+   preamble.tex は単体ではコンパイルできません。^^J
+   latexmk                 (本編ぜんぶの PDF)^^J
+   ================================================================^^J}
+  \expandafter\stop
+\fi
+%% ===========================================================================
+%%  パッケージと設定
+%%
+%%  ここは書き方の設定です。論文を書くのに触る必要はありません。
+%%  自分用に書き換えるのは main.tex だけで済むようにしてあります。
+%%
+%%  余白を変えたい、参考文献の形式を変えたい、といったときだけここを開いてください。
+%% ===========================================================================
+
+%% ===========================================================================
+%%  参考文献の方式（どちらか一方だけを有効にする）
+%% ---------------------------------------------------------------------------
+%%   biblatex + biber : .bib をそのまま使え、日本語文献も UTF-8 で素直に通る。
+%%   natbib  + bst    : 天文分野で使われてきた aasjournalv7.bst をそのまま使う。
+%%  本文の書き方（\citep{} / \citet{}）はどちらでも同じです。
+%%  切り替えたら、いちど latexmk -C で中間ファイルを消してから作り直すこと。
+%% ===========================================================================
+\def\BibStyleBiblatex{}     % ← 既定
+%\def\BibStyleNatbib{}      % ← こちらを使うときは上の行をコメントアウトする
+
+
+%% ===========================================================================
+%%  パッケージと設定
+%% ===========================================================================
+
+%% 共通プリアンブル（フォント・数式・図・単位・マクロ）。
+%% 中身は achilles.sty を見てください。全テンプレートで共通です。
+%% 余白と hyperref はこの下で論文用に設定するので、ここでは外しておく。
+\usepackage[nogeometry,nohyperref]{achilles}
+
+%% 版面。ltjsbook の既定は余白が広いので詰め、両面印刷でのど側を広めに取る。
+\usepackage[a4paper,inner=30truemm,outer=22truemm,top=25truemm,bottom=25truemm]{geometry}
+
+%% 図表
+%% caption は ltjsbook を知らないので
+%%   Package caption Warning: Unknown document class ...
+%% という警告を必ず出しますが、実害はありません。無視してください。
+\usepackage{caption}
+\usepackage{subcaption}      % 図(a)(b) を並べる
+\captionsetup{font=small,labelfont=bf}
+\captionsetup[sub]{font=small,labelformat=parens,labelfont=bf,%
+                   justification=raggedright,singlelinecheck=false}
+\usepackage{longtable}       % 何ページにもわたる表
+\usepackage{pdflscape}       % 横長の表を 90 度回して 1 ページに収める
+\graphicspath{{fig/}}        % \includegraphics{foo} で fig/foo を探す
+
+%% 目次
+\usepackage[nottoc,notlot,notlof]{tocbibind}   % 引用文献を目次に載せる
+\setcounter{tocdepth}{2}      % 目次に出すのは節まで
+\setcounter{secnumdepth}{3}   % 番号を振るのは小節まで
+
+%% 参考文献の実体
+\ifdefined\BibStyleBiblatex
+  \usepackage[backend=biber,
+              style=authoryear,
+              natbib=true,        % \citep \citet を使えるようにする
+              maxcitenames=2,     % 3 人以上は「Hotta et al.」
+              maxbibnames=99,     % 文献リストでは全員書く
+              giveninits=true,    % 名は頭文字だけ
+              uniquename=init,
+              uniquelist=false,   % 3 人以上を必ず「Hotta et al.」に truncate する
+              sorting=nyt,
+              doi=false,isbn=false,url=false,eprint=false,
+              backref=false]{biblatex}
+  \addbibresource{thesis.bib}
+\else
+  \usepackage{natbib}
+  \setcitestyle{authoryear,round,aysep={},citesep={;}}
+\fi
+
+%% リンク。LuaLaTeX なので日本語のしおりはそのまま通る（pxjahyper は不要）。
+%% 紙で提出する版は下の行と入れ替えて文字を黒にすること。
+\usepackage[unicode,colorlinks=true,allcolors=blue,pdfencoding=auto]{hyperref}
+%\usepackage[unicode,colorlinks=false,pdfencoding=auto]{hyperref}  % 印刷用
+\usepackage{url}
+
+%% 表紙
+\usepackage{thesiscover}
+
+%% 添削のときだけ使うもの。行番号を振ると「12 行目のここ」と指摘しやすくなる。
+%% 事務に提出する版では必ずコメントアウトすること。
+%\usepackage{lineno}
+%\linenumbers
+
+%% この論文だけで使うマクロが必要ならここに書く。
+%% ただし、数式の記法をマクロで置き換えるのはやめてください。
+%% ここだけで通じる書き方を覚えても、他所で論文を書くときには使えません。

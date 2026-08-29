@@ -29,7 +29,7 @@ latexmk -C       # 中間ファイルと PDF を消す
 
 `latexmk` にファイル名を渡すときは、`\documentclass` を持っているファイルを
 指定してください。`thesis/` では `main.tex` と `guide-only.tex` の 2 つだけです。
-`body.tex` と `guide.tex` は本文の断片なので単体では組めません
+`body.tex`、`guide.tex`、`preamble.tex` は断片なので単体では組めません
 （間違えて叩いても、その旨のメッセージを出して止まるようにしてあります）。
 
 `thesis/` `exam/` `note/` はそれぞれ独立していて、他のディレクトリに依存しません。
@@ -148,16 +148,24 @@ latexmk
 
 `thesis/` のファイルはこれだけです。
 
+**書き換えるファイル**
+
 | ファイル | 中身 |
 |---|---|
-| `main.tex` | 設定、表紙に載る情報、概要、章の並び。**書き換えるのは主にここ** |
+| `main.tex` | 表紙に載る情報、概要、章の並び |
 | `body.tex` | 本文（序論〜結論） |
-| `guide.tex` | 執筆の手引き（堀田の指導方針）。書き終わったら `main.tex` の `\input{guide}` を外す |
-| `guide-only.tex` | 手引きだけを 1 冊の PDF にするためのファイル。`latexmk guide-only.tex` |
 | `thesis.bib` | 引用文献。NASA ADS の BibTeX をそのまま貼る |
-| `achilles.sty` | 共通プリアンブル |
-| `thesiscover.sty` | 表紙のレイアウト。通常は触らない |
 | `fig/` | 図 |
+
+**触る必要のないファイル**
+
+| ファイル | 中身 |
+|---|---|
+| `preamble.tex` | パッケージと設定。余白や文献の形式を変えるときだけ |
+| `achilles.sty` | 全テンプレート共通のプリアンブル |
+| `thesiscover.sty` | 表紙のレイアウト |
+| `guide.tex` | 執筆の手引き（堀田の指導方針）。書き終わったら `main.tex` の `\input{guide}` を外す |
+| `guide-only.tex` | 手引きだけを 1 冊の PDF にする。`latexmk guide-only.tex` |
 
 * 表紙の所属は `main.tex` の変数で設定します。`thesiscover.sty` は触りません。
   **正式名称は指導教員に確認し、学務に出す書類と表記を揃えてください。**

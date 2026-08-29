@@ -226,18 +226,32 @@ AI をどう使ったか、何がうまくいったかは、ぜひ教えてく�
 
 \subsection{このテンプレートの構成}
 
+自分で書き換えるのは次の 3 つだけです。
+
 \begin{description}
-  \item[\texttt{main.tex}] 設定、表紙に載る情報、概要、章の並び。
-    書き換えるのは主にこのファイルの上半分です。
+  \item[\texttt{main.tex}] 表紙に載る情報、概要、章の並び。
   \item[\texttt{body.tex}] 本文。序論から結論まで。
-  \item[\texttt{guide.tex}] この章。書き終わったら \verb|\input{guide}| を外します。
-    \texttt{body.tex} と同じく本文の断片なので、単体ではコンパイルできません。
-    この章だけの PDF が欲しいときは \verb|latexmk guide-only.tex| としてください。
   \item[\texttt{thesis.bib}] 引用文献。
-  \item[\texttt{achilles.sty}] 全テンプレート共通のプリアンブル。
-  \item[\texttt{thesiscover.sty}] 表紙のレイアウト。触らなくて構いません。
   \item[\texttt{fig/}] 図を置くところ。
 \end{description}
+
+\noindent
+残りは触らなくて構いません。
+
+\begin{description}
+  \item[\texttt{preamble.tex}] パッケージと設定。
+    余白や参考文献の形式を変えたくなったときだけ開いてください。
+  \item[\texttt{achilles.sty}] 全テンプレート共通のプリアンブル。
+  \item[\texttt{thesiscover.sty}] 表紙のレイアウト。
+  \item[\texttt{guide.tex}] この章。書き終わったら \verb|\input{guide}| を外します。
+  \item[\texttt{guide-only.tex}] この章だけの PDF を作るためのものです。
+    \verb|latexmk guide-only.tex| としてください。
+\end{description}
+
+\noindent
+\texttt{body.tex}、\texttt{guide.tex}、\texttt{preamble.tex} は
+\verb|\documentclass| を持たない断片なので、単体ではコンパイルできません。
+間違えて叩いたときは、その旨を出して止まります。
 
 \subsection{コンパイル}
 

@@ -6,13 +6,19 @@
 %%  とすれば main.pdf ができます（-pvc をつけると保存のたびに作り直す）。
 %%  Overleaf では Menu -> Settings -> Compiler を LuaLaTeX にしてください。
 %%
-%%  ファイルはこれだけです。
-%%      main.tex        このファイル。設定・表紙情報・概要・章の並び
+%%  自分用に書き換えるのは、このファイルと body.tex と thesis.bib だけです。
+%%
+%%    書き換えるもの
+%%      main.tex        このファイル。表紙に載る情報、概要、章の並び
 %%      body.tex        本文（序論〜結論）
-%%      guide.tex       執筆の手引き。書き終わったら外してよい
 %%      thesis.bib      引用文献
+%%
+%%    触る必要のないもの
+%%      preamble.tex    パッケージと設定。余白や文献の形式を変えるときだけ
 %%      achilles.sty    全テンプレート共通のプリアンブル
-%%      thesiscover.sty 表紙のレイアウト。通常は触らない
+%%      thesiscover.sty 表紙のレイアウト
+%%      guide.tex       執筆の手引き。書き終わったら \input{guide} を外す
+%%      guide-only.tex  手引きだけの PDF を作るためのもの
 %%
 %%  卒業論文に使うときは、下の \thesistype を「卒業論文」に変えます。
 %% ===========================================================================
@@ -22,89 +28,12 @@
 %% 片面で印刷するなら [a4paper,11pt,oneside] にしてください。
 \documentclass[a4paper,11pt,twoside,openright]{ltjsbook}
 
+%% パッケージと設定は preamble.tex にまとめてあります。触る必要はありません。
+%% 余白や参考文献の形式を変えたくなったときだけ開いてください。
+\input{preamble}
 
 %% ===========================================================================
-%%  1. 参考文献の方式（どちらか一方だけを有効にする）
-%% ---------------------------------------------------------------------------
-%%   biblatex + biber : .bib をそのまま使え、日本語文献も UTF-8 で素直に通る。
-%%   natbib  + bst    : 天文分野で使われてきた aasjournalv7.bst をそのまま使う。
-%%  本文の書き方（\citep{} / \citet{}）はどちらでも同じです。
-%%  切り替えたら、いちど latexmk -C で中間ファイルを消してから作り直すこと。
-%% ===========================================================================
-\def\BibStyleBiblatex{}     % ← 既定
-%\def\BibStyleNatbib{}      % ← こちらを使うときは上の行をコメントアウトする
-
-
-%% ===========================================================================
-%%  2. パッケージと設定
-%% ===========================================================================
-
-%% 共通プリアンブル（フォント・数式・図・単位・マクロ）。
-%% 中身は achilles.sty を見てください。全テンプレートで共通です。
-%% 余白と hyperref はこの下で論文用に設定するので、ここでは外しておく。
-\usepackage[nogeometry,nohyperref]{achilles}
-
-%% 版面。ltjsbook の既定は余白が広いので詰め、両面印刷でのど側を広めに取る。
-\usepackage[a4paper,inner=30truemm,outer=22truemm,top=25truemm,bottom=25truemm]{geometry}
-
-%% 図表
-%% caption は ltjsbook を知らないので
-%%   Package caption Warning: Unknown document class ...
-%% という警告を必ず出しますが、実害はありません。無視してください。
-\usepackage{caption}
-\usepackage{subcaption}      % 図(a)(b) を並べる
-\captionsetup{font=small,labelfont=bf}
-\captionsetup[sub]{font=small,labelformat=parens,labelfont=bf,%
-                   justification=raggedright,singlelinecheck=false}
-\usepackage{longtable}       % 何ページにもわたる表
-\usepackage{pdflscape}       % 横長の表を 90 度回して 1 ページに収める
-\graphicspath{{fig/}}        % \includegraphics{foo} で fig/foo を探す
-
-%% 目次
-\usepackage[nottoc,notlot,notlof]{tocbibind}   % 引用文献を目次に載せる
-\setcounter{tocdepth}{2}      % 目次に出すのは節まで
-\setcounter{secnumdepth}{3}   % 番号を振るのは小節まで
-
-%% 参考文献の実体
-\ifdefined\BibStyleBiblatex
-  \usepackage[backend=biber,
-              style=authoryear,
-              natbib=true,        % \citep \citet を使えるようにする
-              maxcitenames=2,     % 3 人以上は「Hotta et al.」
-              maxbibnames=99,     % 文献リストでは全員書く
-              giveninits=true,    % 名は頭文字だけ
-              uniquename=init,
-              uniquelist=false,   % 3 人以上を必ず「Hotta et al.」に truncate する
-              sorting=nyt,
-              doi=false,isbn=false,url=false,eprint=false,
-              backref=false]{biblatex}
-  \addbibresource{thesis.bib}
-\else
-  \usepackage{natbib}
-  \setcitestyle{authoryear,round,aysep={},citesep={;}}
-\fi
-
-%% リンク。LuaLaTeX なので日本語のしおりはそのまま通る（pxjahyper は不要）。
-%% 紙で提出する版は下の行と入れ替えて文字を黒にすること。
-\usepackage[unicode,colorlinks=true,allcolors=blue,pdfencoding=auto]{hyperref}
-%\usepackage[unicode,colorlinks=false,pdfencoding=auto]{hyperref}  % 印刷用
-\usepackage{url}
-
-%% 表紙
-\usepackage{thesiscover}
-
-%% 添削のときだけ使うもの。行番号を振ると「12 行目のここ」と指摘しやすくなる。
-%% 事務に提出する版では必ずコメントアウトすること。
-%\usepackage{lineno}
-%\linenumbers
-
-%% この論文だけで使うマクロが必要ならここに書く。
-%% ただし、数式の記法をマクロで置き換えるのはやめてください。
-%% ここだけで通じる書き方を覚えても、他所で論文を書くときには使えません。
-
-
-%% ===========================================================================
-%%  3. 表紙に載る情報（ここは各自書き換える）
+%%  1. 表紙に載る情報（ここは各自書き換える）
 %%     ★ 所属の正式名称は指導教員に確認すること。学務に出す書類と表記を揃える。
 %% ===========================================================================
 \thesistype{修士論文}          % 卒業論文なら「卒業論文」に変える
@@ -128,33 +57,9 @@
 
 
 %% ===========================================================================
-%%  4. 本文
+%%  2. 本文
 %% ===========================================================================
 \begin{document}
-
-%% ===========================================================================
-%%  手引きだけの PDF を作るとき（guide-only.tex から読まれたとき）
-%%  ここは通り道が違うだけで、設定も文献も本編とまったく同じものを使います。
-%%      latexmk guide-only.tex
-%% ===========================================================================
-\ifdefined\GuideOnly
-\frontmatter
-\thispagestyle{empty}
-\vspace*{5\zw}
-\begin{center}
-  {\LARGE 修士論文を書くにあたって\par}
-  \vspace{2\zw}
-  {\large 名古屋大学宇宙地球環境研究所\par}
-  \vspace{0.5\zw}
-  {\large 堀田 英之\par}
-  \vspace{1\zw}
-  {\large \today\par}
-\end{center}
-\clearpage
-\tableofcontents
-\mainmatter
-\input{guide}
-\else
 
 %% --- 前付け（ページ番号がローマ数字になる） -------------------------------
 \frontmatter
@@ -214,10 +119,8 @@
 %% （例：スーパーコンピュータ「富岳」、ひので、SDO など）。使う前に確認すること。
 \todo{書く}
 
-\fi   % ← \ifdefined\GuideOnly の終わり
-
 %% --- 引用文献 -------------------------------------------------------------
-%% 手引きだけの PDF でも文献は出す（guide の中で引用しているため）。
+%% どちらの方式を使うかは preamble.tex の冒頭で決めています。
 \ifdefined\BibStyleBiblatex
   \printbibliography[title={引用文献}]
 \else

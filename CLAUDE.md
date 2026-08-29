@@ -99,13 +99,31 @@ guide.tex にも README にも詳細を複製しない**（二重管理は腐る
 * `paths` フィルタを付けてあるので、README だけ直したときは走らない。
 * private repo でも無料枠 2000 分/月に対して 1 回 5 分程度なので問題にならない。
 
-**手引きだけの PDF (`guide-only.pdf`) の作り方**：`guide.tex` は `\chapter` なので
-単体ではコンパイルできない。プリアンブルを複製したくないので、
-`thesis/guide-only.tex` は `\def\GuideOnly{}` してから `\input{main}` するだけの
-3 行のファイルにしてある。`main.tex` 側は `\ifdefined\GuideOnly` で
-表紙・概要・本文・付録・謝辞を飛ばし、簡単な扉と目次と `\input{guide}` だけを出す。
-引用文献はどちらの経路でも出す（guide の中で引用しているため）。
-`\documentclass` の前に `\def` を置くのは合法。
+**手引きだけの PDF (`guide-only.pdf`)**：`guide-only.tex` は `main.tex` とは別の、
+ふつうの独立した文書。設定だけを同じ `preamble.tex` から読む。
+配って読ませるものなので `oneside`（白紙ページが入らない）。
+
+> 当初は `\def\GuideOnly{}` してから `\input{main}` し、`main.tex` 側で
+> `\ifdefined\GuideOnly` で分岐させていたが、「わかりにくい」と却下された。
+> `preamble.tex` を切り出したことで分岐なしで書けるようになった。
+
+### 学生が触るファイルを絞る（2026-08-29）
+
+「学生が触るファイルは一つだけ」にしたいという要望で、`main.tex` を
+`\usepackage{thesiscover}` の位置で二つに割った。
+
+* `main.tex` … 表紙に載る情報、概要、章の並び。**書き換えるのはここ**
+* `preamble.tex` … `\documentclass` 以外のパッケージと設定。触らない
+
+**`\documentclass` だけは `main.tex` に残してある。** Overleaf は
+`\documentclass` を探して Main document の候補を出すので、`main.tex` から
+消すと `preamble.tex` のほうが主文書と判定されかねない。
+片面印刷への切り替え行でもあるので、1 行だけ残すのが安全。
+
+`body.tex` / `guide.tex` / `preamble.tex` の先頭には、単体で `latexmk` に
+渡されたときに一度だけメッセージを出して止まるガードを入れてある
+（`\ifdefined\chapter\else ... \stop \fi`）。
+これがないと `nullfont` の Missing character が数千行出たあとに落ちる。
 
 ## 実装上のはまりどころ（再発防止）
 
