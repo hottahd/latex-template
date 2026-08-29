@@ -146,6 +146,31 @@ guide.tex にも README にも詳細を複製しない**（二重管理は腐る
 * `Package caption Warning: Unknown document class` は `caption` が `ltjsbook` を
   知らないだけ。実害なし。`main.tex` にその旨を書いてある。
 
+## Overleaf との連携（2026-08-29）
+
+学生は研究室 Overleaf の **New Project → Templates** から始める。
+LuaLaTeX の compiler 設定はテンプレートから引き継がれることを実機で確認済み。
+
+`tools/push-to-overleaf.sh <名前>` が、git-bridge 経由で
+このリポジトリ → Overleaf のテンプレート用プロジェクトの一方向同期をする。
+
+* **正本はこのリポジトリ。** Overleaf 側は写しで、画面で直接編集しても次回上書きされる。
+* 送るのは `git ls-files` に出るものだけ。PDF や中間ファイルは混ざらない。
+* サブディレクトリ（`thesis/`）→ Overleaf プロジェクトのルート、という写し替えがあるので
+  `git push` では済まない。`git subtree push` も考えたが、Overleaf 画面での編集が
+  1 回でも入ると失敗して分かりにくいので、毎回まるごと上書きする形にした。
+* 接続先は **repo の外**（`~/.config/latex-template/overleaf.conf`）。
+  public にしたときに学内アドレスとプロジェクト ID を出さないため。
+* 送ったあと、テンプレートへの反映は手動（Overleaf で一度コンパイル →
+  Menu → Manage template）。**コンパイル済みでないとメニューが押せない。**
+
+### CE+ のテンプレートギャラリーは既定で無効
+
+`template-gallery` モジュールはイメージに入っているが、
+`OVERLEAF_TEMPLATE_GALLERY=true` を立てないと `Settings.templates` が作られず、
+`Features.hasFeature('templates-server-pro')` が false になって
+**管理者でもメニューに出ない**。2026-08-29 に研究室サーバーで有効化済み。
+
 ## ビルドが不可解に失敗するとき
 
 `TEXINPUTS` や `BIBINPUTS` に個人用のスタイルファイル置き場を通していると、

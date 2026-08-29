@@ -101,16 +101,33 @@ latexmk
 アクセス方法・アカウント・添削の流れは、別に配ってある
 **「研究室 Overleaf 利用案内」**（MS Loop）を見てください。ここでは重複させません。
 
-テンプレートを Overleaf に持っていく手順は次のとおりです。
-
-1. 使いたいディレクトリ（例：`thesis/`）の**中身**を zip にまとめる。
-   リポジトリ全体ではなく、そのディレクトリの中身だけにすること。
-2. **New Project → Upload Project** から zip を上げる。
-3. **Menu → Settings → Compiler** を **LuaLaTeX** に変える。ここが一番忘れやすい。
-4. **Main document** が `main.tex` になっていることを確認する。
+修士論文は**テンプレートから始められます**。
+研究室 Overleaf の **New Project → Templates** に登録してあるので、
+そこから作れば LuaLaTeX の設定も付いてきます。ファイルを持ち込む必要はありません。
 
 添削を頼むときは、その版に `review-hotta` のようなラベルを付けて連絡します。
 `latexdiff` で差分の PDF を作る必要はありません。
+
+### テンプレートを更新する（堀田用）
+
+このリポジトリが正本で、Overleaf 側は写しです。
+リポジトリを直したら、次のコマンドで送ります。
+
+```sh
+./tools/push-to-overleaf.sh thesis --dry-run   # 何が変わるか見るだけ
+./tools/push-to-overleaf.sh thesis             # 送る
+```
+
+git-bridge 経由で、**git が管理しているファイルだけ**を Overleaf 側に上書きします
+（PDF や中間ファイルは混ざりません）。送ったあと、テンプレートに反映するには
+Overleaf でプロジェクトを開いて**一度コンパイルし**、
+**Menu → Manage template** で更新します。コンパイルしていないとメニューが押せません。
+すでに学生が作ったプロジェクトには反映されません。
+
+接続先（プロジェクト ID と学内アドレス）は、このリポジトリではなく
+`~/.config/latex-template/overleaf.conf` に置いています。
+初回だけ Overleaf の Git 認証トークンを聞かれます
+（Account Settings で発行。表示は一度きり。ユーザー名は `git`）。
 
 ---
 
