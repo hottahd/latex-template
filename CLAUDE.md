@@ -19,7 +19,7 @@
 * TeX Live / MacTeX を素で入れれば luatexja と原ノ味フォントが同梱されており、
   OS によらずフォント設定なしで同じ PDF が出る。
   uplatex→dvipdfmx は Windows での和文フォント埋め込みでつまずきやすい。
-* 堀田自身の講義資料（`~/Dropbox/Documents/class/*/`）がすでに `ltjarticle` +
+* 堀田自身の講義資料がすでに `ltjarticle` +
   LuaLaTeX なので、講義テスト・ノートと論文でツールチェインが 1 本になる。
 * Overleaf も LuaLaTeX を選ぶだけで通る。
 * 代償：`pxjahyper`、`otf`、`jecon*.bst` など (u)pLaTeX 前提の資産は使えない。
@@ -52,21 +52,23 @@
 
 ### guide.tex は堀田本人の指導方針・文体で書いてある（2026-08-29 改稿）
 
-初稿は話題の区切りを奥村版のファイル名から借りていたため、本人の指示で全面的に
-書き直した。**推測で書き足さないこと。** 元にした資料は次の 3 つ。
+初稿は話題の区切りを奥村版のファイル名から借りていたうえ、文体も禁止事項の
+列挙になっていて嫌味っぽかったため、本人の指示で二度書き直した。
 
-* 発表の心得（文体の見本。です・ます調、学生への語りかけ、具体例が長い、
-  自称は「私」と「堀田」）
-  <https://sites.google.com/site/hideyukihotta/home/note/student_1>
-* 学生の研究における AI との付き合い方
-  <https://hotta.notion.site/AI-3a604f9ef588804f92dceed12fcb99b7>
-* 堀田研究グループ加入にあたって（指導哲学）
-  Notion ページ `c902d3e9-d4d2-4c25-bbf5-4b617d8db94d`
-* 添削の運用 → `~/Repository/overleaf-guide/guide.md`（正本は MS Loop）
+**推測で指導方針を書き足さないこと。** 本人が書いた文章（発表の心得、
+AI との付き合い方、研究グループ加入にあたって）を一次資料として、
+そこに書いてあることだけを使う。
 
-Notion ページは公開 URL を WebFetch しても本文が取れない（SPA）。
-`~/Repository/notes/meta/notion.py --page <ハイフン付き ID>` で
-Notion デスクトップアプリのローカル DB から読める。
+文体は **です・ます調で学生に語りかける形**。次の 3 つを外さないこと。
+初稿はこれを全部落としたために嫌味な文章になった。
+
+* 自分を下げる（「私も毎回大変です」「私も学生の頃はよく直されました」）
+* 共感してから言う（「気持ちはよく分かります」「正直つらいと思います」）
+* 楽しさに戻る（最後は必ず前向きに閉じる）
+
+禁止形（「〜してはいけません」）より依頼形（「〜しないでください」）を選ぶ。
+相手を疑う書き方（「隠さないでください」）や、こちらの都合を持ち出す書き方
+（「私の時間を使わせないでください」）は書かない。
 
 本人が挙げた「毎年同じことを言っている」指摘：
 
@@ -80,16 +82,10 @@ Notion デスクトップアプリのローカル DB から読める。
 章立ては「序論・手法（モデルの説明）・結果・議論・結論」で固定。
 数値シミュレーションがほとんどのため。
 
-添削は研究室 Overleaf 内で完結。ラベル `review-hotta` を付けて連絡させる。
-日常の添削で latexdiff は使わない。コメント・提案を学生に承認・却下させない。
-**この運用の正本は MS Loop の「研究室 Overleaf 利用案内」なので、
+添削は研究室の Overleaf 内で完結し、学生にはラベル（`review-hotta` の形）を
+付けてもらう。日常の添削で latexdiff は使わない。
+**この運用の正本は別に配っている「研究室 Overleaf 利用案内」なので、
 guide.tex にも README にも詳細を複製しない**（二重管理は腐る）。
-
-### ファイルを増やしすぎない
-
-本人の希望で、章ごとの分割はしていない。`thesis/` は
-`main.tex` / `body.tex` / `guide.tex` / `thesis.bib` + sty 2 つだけ。
-プリアンブルと表紙情報も `main.tex` に入れてある。
 
 ### GitHub Actions で 4 つの PDF を作る（2026-08-29 追加）
 
@@ -132,21 +128,19 @@ guide.tex にも README にも詳細を複製しない**（二重管理は腐る
 * `Package caption Warning: Unknown document class` は `caption` が `ltjsbook` を
   知らないだけ。実害なし。`main.tex` にその旨を書いてある。
 
-## 環境について（堀田のマシン固有）
+## ビルドが不可解に失敗するとき
 
-シェルが以下を設定しているため、TeX Live のパッケージが個人用のもので
-上書きされることがある。
+`TEXINPUTS` や `BIBINPUTS` に個人用のスタイルファイル置き場を通していると、
+TeX Live のパッケージがそちらで上書きされることがある。
+古い `natbib.sty` が読まれて `\setcitestyle` が
+「Undefined control sequence」になる、といった形で出る。
 
+```sh
+kpsewhich -all natbib.sty      # 複数出たら疑う
+env -u TEXINPUTS -u BIBINPUTS latexmk   # 切り分け
 ```
-TEXINPUTS=:/Users/hotta/Dropbox/tex/sty:
-BIBINPUTS=:/Users/hotta/Dropbox/tex/bib:
-```
 
-実際 `/Users/hotta/Dropbox/tex/sty/natbib.sty` は **1998 年版 (6.8c)** で、
-TeX Live 2026 の natbib (8.31b) を隠してしまう。`\setcitestyle` が
-「Undefined control sequence」になるのはこれが原因。学生の環境では起きない。
-確認は `kpsewhich -all natbib.sty`。整理するか、このリポジトリを触るときだけ
-`env -u TEXINPUTS -u BIBINPUTS latexmk` で回避する。
+CI は素の TeX Live で動くので、手元だけで起きる問題はここで切り分けられる。
 
 ## 未確定・TODO
 
