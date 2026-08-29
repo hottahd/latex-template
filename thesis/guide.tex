@@ -18,8 +18,9 @@
 %%  修士論文を書くにあたって
 %%
 %%  論文の中身ではなく書き方の説明です。書き始める前に一度読んでください。
-%%  自分の原稿が形になってきたら、main.tex の \input{guide} を
-%%  コメントアウトして構いません。
+%%  本文（main.tex）には入りません。この章だけの PDF は
+%%      latexmk guide-only.tex
+%%  で作れます。
 %% ===========================================================================
 
 \chapter{修士論文を書くにあたって}
@@ -242,7 +243,7 @@ AI をどう使ったか、何がうまくいったかは、ぜひ教えてく�
     余白や参考文献の形式を変えたくなったときだけ開いてください。
   \item[\texttt{achilles.sty}] 全テンプレート共通のプリアンブル。
   \item[\texttt{thesiscover.sty}] 表紙のレイアウト。
-  \item[\texttt{guide.tex}] この章。書き終わったら \verb|\input{guide}| を外します。
+  \item[\texttt{guide.tex}] この章。論文の本文には入りません。
   \item[\texttt{guide-only.tex}] この章だけの PDF を作るためのものです。
     \verb|latexmk guide-only.tex| としてください。
 \end{description}
@@ -314,6 +315,5 @@ NASA ADS の \textsf{Export Citation} から \textsf{BibTeX} を選べば、そ�
   \item 添字のローマン体・イタリック体が正しいか
   \item 図がすべて本文から参照されているか
   \item 引用文献が本文の引用とすべて対応しているか
-  \item この章を \texttt{main.tex} から外したか
   \item 行番号（\texttt{lineno}）を切ったか
 \end{itemize}

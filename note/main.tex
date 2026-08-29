@@ -1,118 +1,125 @@
 %% ===========================================================================
-%%  研究ノート・講義ノート用テンプレート（堀田グループ）
+%%  ノート用テンプレート（堀田グループ）
 %%
 %%  このテンプレートは MIT License です。自由に使ってください。
 %%  https://github.com/hottahd/latex-template
+%%
+%%  講義ノート、手法の解説、コードの説明など、
+%%  「一つの話題をまとまった形で書き切る文書」のためのものです。
 %%
 %%  エンジンは LuaLaTeX です。このディレクトリで
 %%      latexmk        PDF を作る
 %%      latexmk -pvc   保存するたびに作り直す（書きながら使うならこれ）
 %%
-%%  ノートは「あとで自分が読み返して分かること」が目的なので、
-%%  日付と、どこまで確かめたのかを残しておくと後で助かります。
+%%  ファイルはこれだけです。
+%%      main.tex   このファイル。本文もここに書く
+%%      fig/       図を置くところ
 %% ===========================================================================
 
-\documentclass[a4paper,11pt]{ltjsarticle}
+\documentclass[a4j,12pt]{ltjarticle}
 
 %% 共通プリアンブル（フォント・数式・図・単位・マクロ）。
 %% 中身は achilles.sty を見てください。全テンプレートで共通です。
 \usepackage[nogeometry]{achilles}
-\usepackage[margin=22truemm]{geometry}
+\usepackage[margin=20truemm]{geometry}
 
-%% newtxmath が \openbox を定義済みなので、そのままだと amsthm と衝突する。
-%% 証明終わりの記号は amsthm 側の定義を使うので、先に消しておく。
-\let\openbox\relax
-\usepackage{amsthm}
-\usepackage{tcolorbox}
-\tcbuselibrary{skins,breakable}
-
-%% 式番号は節ごとに 1.1, 1.2 と振る
+%% 節ごとに 1.1, 1.2 と式番号を振り直す。
+%% 通し番号がよければこの行を消してください。
 \numberwithin{equation}{section}
 
-%% --- 定理・定義などの環境 -------------------------------------------------
-\theoremstyle{definition}
-\newtheorem{teigi}{定義}[section]
-\newtheorem{teiri}[teigi]{定理}
-\newtheorem{rei}[teigi]{例}
-\theoremstyle{remark}
-\newtheorem*{chui}{注意}
+\graphicspath{{fig/}}        % \includegraphics{foo} で fig/foo を探す
 
-%% --- 覚え書き用の箱 -------------------------------------------------------
-%% \begin{memo}{見出し} ... \end{memo}
-%% 「なぜこうしたのか」「ここで詰まった」を書き残すのに使う。
-\newtcolorbox{memo}[1][]{breakable,colback=yellow!6,colframe=yellow!50!black,
-  fonttitle=\bfseries\small,title={#1},left=5pt,right=5pt}
-
-%% --- 未確認の事項 ---------------------------------------------------------
-%% achilles.sty の \todo{} と同じく、消し忘れを防ぐため目立たせている。
-%% あとで grep して回収する。
-\newcommand{\yokakunin}[1]{\textcolor{orange}{\textbf{[要確認: #1]}}}
-
-\title{ノートの表題}
-\author{堀田 英之}
+\title{ノートの題目}
+\author{名古屋大学宇宙地球環境研究所　堀田 英之}
 \date{\today}
 
 \begin{document}
 \maketitle
 
-%% 節が増えてきたら目次を出す。要らなければこの行を消す。
+%% 節が少ないうちは目次を消して構いません。
 \tableofcontents
+\clearpage
+
 
 \section{はじめに}
 
-このノートで何を確かめたいのかを最初に一行で書いておく。
-半年後の自分は、何を考えていたか覚えていない。
+このノートで何を説明するのかを、最初に短く書いておきます。
+半年後の自分と、これを渡される誰かのためです。
 
-\begin{memo}[この日の目的]
-  対流層の熱輸送で、混合距離理論の予言と数値計算がどこでずれるのかを整理する。
-\end{memo}
 
-\section{式の展開}
+\section{数式の書き方}
 
-\begin{teigi}[エントロピー勾配]
-  超断熱度を
-  \begin{align}
-    \delta \equiv \nabla - \nabla_\mathrm{ad}
-  \end{align}
-  で定義する。
-\end{teigi}
-
-対流によるエンタルピー流束は
+番号を振って後で参照する式は \texttt{align} を使います。
 \begin{align}
-  F_\mathrm{conv} = \rho c_p \overline{u_r T'}
-  \label{eq:fconv}
+  \frac{\partial Q}{\partial t} = -v\frac{\partial Q}{\partial x}
+  \label{eq:advection}
 \end{align}
-と書ける。式\eqref{eq:fconv}の右辺を混合距離理論で評価すると
+ここで $Q$ は物理量、$t$ は時間、$x$ は座標です。
+式\eqref{eq:advection}のように \verb|\eqref| で参照すると括弧が付きます。
+
+途中式を並べるときは \verb|\nonumber| で番号を落とし、
+最後の行にだけ番号を付けると読みやすくなります。
 \begin{align}
-  F_\mathrm{conv} \sim \rho u_r^3
+  Q(x,t+\Delta t)
+   &= Q(x,t) + \frac{\partial Q}{\partial t}\Delta t \nonumber\\
+   &= Q(x,t) - v\frac{\partial Q}{\partial x}\Delta t \nonumber\\
+   &= Q(x-v\Delta t,t).
+  \label{eq:general_advection}
 \end{align}
-となる。
 
-\begin{chui}
-  ここでは密度成層を無視した。実際の太陽では
-  $\rho$ が対流層内で 6 桁変わるので、この近似は表面近くで破綻する。
-\end{chui}
+ベクトルは \verb|\bm{}| で書きます。$(\bm{v}\cdot\nabla)Q$ のようになります。
+独自の短縮マクロは用意していません。$\nabla\cdot$ や
+$\dfrac{\partial f}{\partial x}$ はそのまま書いてください。
 
-\yokakunin{係数の $1/2$ がどこから来るか、Kippenhahn の教科書で確認する}
+単位付きの数値は \texttt{siunitx} を使うと、
+数字と単位の間の空きが自動で正しくなります。
+たとえば太陽半径なら \qty{6.96e10}{cm}、
+自転角速度なら \qty{2.6e-6}{\per\second} と書きます。
 
-\section{数値の確認}
 
-\begin{rei}[太陽の対流速度]
-  $F_\odot = \qty{6.3e7}{\watt\per\meter\squared}$、
-  $\rho = \qty{0.2}{\kg\per\meter\cubed}$ とすると
-  $u_r \sim (F_\odot/\rho)^{1/3} \simeq \qty{700}{\meter\per\second}$ となり、
-  観測される粒状斑の速度と同程度である。
-\end{rei}
+\section{図の入れ方}
 
-\section{図を貼る}
+図は \texttt{fig/} に置いて、本文から必ず参照します。
+LuaLaTeX が読めるのは PDF・PNG・JPEG です。
+折れ線や等高線は PDF、画素の塊は PNG にしてください。
 
-%% 画像はこのディレクトリか fig/ に置く。
-%% LuaLaTeX が読めるのは PDF・PNG・JPEG。EPS は先に PDF へ変換しておく。
-%\begin{figure}[tb]
-%  \centering
-%  \includegraphics[width=0.7\linewidth]{foo.pdf}
-%  \caption{図の説明。}
-%  \label{fig:foo}
-%\end{figure}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\linewidth]{sample.pdf}
+  \caption{図の説明。軸の量と単位、線が何を表すかを書く。
+    色で量を示したときはカラーバーを必ず付ける。}
+  \label{fig:sample}
+\end{figure}
+
+図\ref{fig:sample}のように \verb|\ref| で参照します。
+図の中の文字は、貼り付けて印刷したときに読める大きさにしてください。
+
+
+\section{表の入れ方}
+
+\texttt{booktabs} を使うと、縦罫線のない読みやすい表になります。
+表のキャプションは表の上に置きます。
+
+\begin{table}[htbp]
+  \centering
+  \caption{表の説明。}
+  \label{tab:sample}
+  \begin{tabular}{lll}
+    \toprule
+    項目 & 値 & 備考 \\
+    \midrule
+    太陽半径     & \qty{6.96e10}{cm}          & \\
+    自転角速度   & \qty{2.6e-6}{\per\second}  & 赤道 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\section{長くなってきたら}
+
+一つのファイルで書けなくなったら、節ごとにファイルを分けて
+\verb|\input{advection}| のように読み込めます。
+文献を引く必要が出てきたら、\texttt{thesis/} の \texttt{main.tex} に
+\texttt{biblatex} の設定があるので、そこから持ってきてください。
 
 \end{document}

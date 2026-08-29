@@ -180,7 +180,7 @@ Overleaf でプロジェクトを開いて**一度コンパイルし**、
 | `preamble.tex` | パッケージと設定。余白や文献の形式を変えるときだけ |
 | `achilles.sty` | 全テンプレート共通のプリアンブル |
 | `thesiscover.sty` | 表紙のレイアウト |
-| `guide.tex` | 執筆の手引き（堀田の指導方針）。書き終わったら `main.tex` の `\input{guide}` を外す |
+| `guide.tex` | 執筆の手引き（堀田の指導方針）。論文の本文には入らない |
 | `guide-only.tex` | 手引きだけを 1 冊の PDF にする。`latexmk guide-only.tex` |
 
 * 表紙の所属は `main.tex` の変数で設定します。`thesiscover.sty` は触りません。
