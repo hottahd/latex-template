@@ -1,0 +1,159 @@
+%% ===========================================================================
+%%  試験・小テスト用テンプレート（堀田グループ）
+%%
+%%  エンジンは LuaLaTeX です。このディレクトリで
+%%      latexmk
+%%  とすれば main.pdf ができます。
+%%
+%%  問題用と解答例つきの 2 種類を、下の 1 行を書き換えるだけで作り分けられます。
+%%  問題文は 1 つしかないので、両者が食い違う心配がありません。
+%% ===========================================================================
+
+\documentclass[a4j,12pt]{ltjarticle}
+%\documentclass[a4j,twocolumn]{ltjarticle}   % 2 段組で詰めたいとき
+
+%% ===========================================================================
+%%  1. どちらを出力するか
+%% ---------------------------------------------------------------------------
+%%   \showanswerfalse  問題用。\begin{kaitou} ... \end{kaitou} は出力されない
+%%   \showanswertrue   解答例つき。表題に「解答例」がつく
+%%  作り分けたら PDF の名前を変えて保存すること。
+%%      latexmk && mv main.pdf 期末テスト_問題.pdf
+%% ===========================================================================
+\newif\ifshowanswer
+\showanswerfalse
+%\showanswertrue
+
+
+%% ===========================================================================
+%%  2. パッケージと設定
+%% ===========================================================================
+
+%% 共通プリアンブル（フォント・数式・図・単位・マクロ）。
+%% 中身は achilles.sty を見てください。全テンプレートで共通です。
+\usepackage[nogeometry]{achilles}
+\usepackage[margin=20truemm]{geometry}
+
+\usepackage{comment}     % 解答を丸ごと出し入れするために使う
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+%% 節番号を「1」「2」ではなく「問 1」「問 2」にする
+\renewcommand{\thesection}{問\arabic{section}}
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+%% 式番号は節ごとに振り直す
+\numberwithin{equation}{section}
+
+%% --- 解答環境 -------------------------------------------------------------
+%% 使い方（\end{kaitou} は必ず独立した行に書くこと。comment パッケージの制約）
+%%
+%%   \begin{kaitou}
+%%     $T = 2\pi/\Omega = \qty{25}{day}$ である。
+%%   \end{kaitou}
+%%
+\ifshowanswer
+  \specialcomment{kaitou}{%
+    \begin{tcolorbox}[breakable,colback=blue!3,colframe=blue!45,
+                      title=解答,fonttitle=\bfseries\small,left=4pt,right=4pt]%
+  }{%
+    \end{tcolorbox}%
+  }
+\else
+  \excludecomment{kaitou}
+\fi
+
+%% --- 解答欄 ---------------------------------------------------------------
+%% \ansspace{4cm} で、問題用のときだけ 4cm の余白を空ける（答案に書かせる欄）。
+%% 解答例つきのときは詰めて出す。
+\newcommand{\ansspace}[1]{\ifshowanswer\vspace{2mm}\else\vspace{#1}\fi}
+
+%% --- 配点 -----------------------------------------------------------------
+%% 見出しの右端に（10 点）と出す。\section{太陽の自転\haiten{20}} のように、
+%% 見出しの中に書く。
+\newcommand{\haiten}[1]{\texorpdfstring{\hfill\normalsize（#1 点）}{}}  % しおりには出さない
+
+%% --- 表題 -----------------------------------------------------------------
+%% ここを書き換える
+\newcommand{\kamoku}{宇宙物理学III}
+\newcommand{\shiken}{期末テスト}
+\newcommand{\jisshibi}{2026年7月30日}
+
+\title{\kamoku\ \shiken\ifshowanswer\ 解答例\fi}
+\author{}
+\date{\jisshibi}
+
+
+%% ===========================================================================
+%%  3. 本文
+%% ===========================================================================
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+%% 問題用のときだけ、注意書きと氏名欄を出す
+\ifshowanswer\else
+\noindent
+\begin{tcolorbox}[colback=black!3,colframe=black!40,left=6pt,right=6pt]
+  \small
+  \begin{itemize}[leftmargin=1.2em,itemsep=0pt,topsep=0pt]
+    \item 解答は答案用紙に書くこと。途中の考え方も採点の対象とする。
+    \item 電卓・参考書の持ち込みは不可。
+    \item 有効数字の指定がある問いは、指定の桁で答えること。
+  \end{itemize}
+  \vspace{2mm}
+  \normalsize
+  学籍番号 \underline{\hspace{40mm}}\qquad 氏名 \underline{\hspace{50mm}}
+\end{tcolorbox}
+\vspace{5mm}
+\fi
+
+
+\section{太陽の自転\haiten{20}}
+
+太陽の赤道は $\Omega/2\pi = \qty{460}{nHz}$ 程度で自転している。
+ここで $\Omega = u_\phi/L$ は角速度、$u_\phi$ は自転速度、$L$ は回転軸からの距離である。
+太陽半径は \qty{700}{Mm} とする。
+
+\subsection{}
+赤道の自転周期を有効数字 2 桁で求めなさい（単位は日）。
+
+\ansspace{3cm}
+
+\begin{kaitou}
+  $T = 1/(\Omega/2\pi) = 1/(\qty{460e-9}{\per\second})
+   = \qty{2.17e6}{\second} \simeq \qty{25}{\day}$ である。
+\end{kaitou}
+
+\subsection{}
+赤道の自転速度を有効数字 1 桁で求めなさい（単位は $\mathrm{km~s^{-1}}$）。
+
+\ansspace{3cm}
+
+\begin{kaitou}
+  $u_\phi = 2\pi R_\odot / T
+   = 2\pi \times \qty{700}{Mm} / \qty{2.17e6}{\second}
+   \simeq \qty{2}{\km\per\second}$ である。
+\end{kaitou}
+
+
+\section{見かけの自転周期\haiten{15}}
+
+地球は公転しているので、地球から観測した見かけの太陽の自転周期は
+問 1 の答えよりもやや長くなる。どの程度長くなるか有効数字 1 桁で答えよ（単位は日）。
+地球の公転角速度を $\Omega_\oplus$ として、$\Omega_\oplus/\Omega$ の
+一次までの寄与を考えればよい。
+
+\ansspace{5cm}
+
+\begin{kaitou}
+  見かけの角速度は $\Omega - \Omega_\oplus$ なので、
+  \begin{align*}
+    T_\mathrm{syn} = \frac{2\pi}{\Omega-\Omega_\oplus}
+      = \frac{T}{1-\Omega_\oplus/\Omega}
+      \simeq T\left(1+\frac{\Omega_\oplus}{\Omega}\right).
+  \end{align*}
+  $\Omega_\oplus/\Omega = T/T_\oplus = 25/365 \simeq 0.068$ より、
+  延びは $T \times 0.068 \simeq \qty{2}{\day}$ である。
+\end{kaitou}
+
+\end{document}

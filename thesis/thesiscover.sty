@@ -1,0 +1,107 @@
+%% thesiscover.sty --- 修士論文・卒業論文の表紙
+%%
+%% 所属や氏名は main.tex の「3. 表紙に載る情報」で指定します。
+%% 大学名・研究科・専攻・研究室をすべて変数にしてあるので、
+%% 所属が変わってもこのファイルを触る必要はありません。
+%% レイアウト自体（文字の大きさや行間）を変えたいときだけここを編集してください。
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{thesiscover}[2026/08/28 v1.0 thesis cover page for ltjsbook]
+
+\makeatletter
+
+%% --- main.tex から設定する項目 --------------------------------------------
+\def\thesistype#1{\def\@thesistype{#1}}         % 修士論文 / 卒業論文
+\def\nendo#1{\def\@nendo{#1}}                   % 年度（西暦）
+\def\seifuku#1{\def\@seifuku{#1}}               % 正本 / 副本（不要なら空）
+\def\titleen#1{\def\@titleen{#1}}               % 英語題目（不要なら空）
+\def\university#1{\def\@university{#1}}         % 大学名
+\def\graduateschool#1{\def\@graduateschool{#1}} % 研究科
+\def\department#1{\def\@department{#1}}         % 専攻・領域
+\def\labname#1{\def\@labname{#1}}               % 研究室名
+\def\course#1{\def\@course{#1}}                 % 課程・学年
+\def\studentid#1{\def\@studentid{#1}}           % 学籍番号
+\def\supervisor#1{\def\@supervisor{#1}}         % 指導教員
+\def\cosupervisor#1{\def\@cosupervisor{#1}}     % 副指導教員（不要なら空）
+
+%% --- 既定値（main.tex で上書きされる） ------------------------------------
+\thesistype{修士論文}
+\nendo{\the\year}
+\seifuku{}
+\titleen{}
+\university{名古屋大学大学院}
+\graduateschool{理学研究科}
+\department{理学専攻 物理科学領域}
+\labname{}
+\course{博士前期課程2年}
+\studentid{}
+\supervisor{}
+\cosupervisor{}
+
+%% 空欄なら何も出さないための補助。
+%% （tabular の中で \ifx ... \\ ... \fi と書くと表の桁分けが壊れるので、
+%%   条件分岐は必ず行や表の外側で完結させている）
+\newcommand{\thc@line}[1]{\ifx#1\@empty\else #1\par\fi}
+
+%% --- 表紙 -----------------------------------------------------------------
+\renewcommand{\maketitle}{%
+  \begin{titlepage}%
+    \let\footnotesize\small
+    \let\footnoterule\relax
+    \let\footnote\thanks
+    \null\vfil
+    \begin{center}%
+      {\Large \@nendo 年度　\@thesistype \par}%
+      \ifx\@seifuku\@empty\else
+        \vskip 0.5em {\Large \@seifuku \par}%
+      \fi
+      \vskip 9em%
+      {\LARGE \@title \par}%
+      \ifx\@titleen\@empty\else
+        \vskip 1.5em {\large \@titleen \par}%
+      \fi
+      \vskip 9em%
+      %% 所属
+      {\large
+        \baselineskip 1.6\baselineskip
+        \thc@line{\@university}%
+        \thc@line{\@graduateschool}%
+        \thc@line{\@department}%
+        \thc@line{\@labname}%
+      }%
+      \vskip 3em%
+      %% 課程・学籍番号・氏名
+      {\large
+        \baselineskip 1.6\baselineskip
+        \thc@line{\@course}%
+        \ifx\@studentid\@empty\else 学籍番号 \@studentid \par\fi
+        \vskip 0.8em
+        {\Large \@author \par}%
+      }%
+      %% 指導教員
+      \ifx\@supervisor\@empty\else
+        \vskip 2.5em%
+        \ifx\@cosupervisor\@empty
+          {\large 指導教員\quad \@supervisor \par}%
+        \else
+          {\large
+            \begin{tabular}{r@{\quad}l}%
+              指導教員   & \@supervisor \\
+              副指導教員 & \@cosupervisor
+            \end{tabular}\par}%
+        \fi
+      \fi
+      \vskip 2em
+      {\large \@date \par}%
+    \end{center}%
+    \par
+    \@thanks\vfil\null
+  \end{titlepage}%
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@thanks\@empty
+}%
+
+\makeatother
+\endinput

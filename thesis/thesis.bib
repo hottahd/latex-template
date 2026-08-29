@@ -1,0 +1,51 @@
+%% 引用文献のデータベース
+%%
+%% NASA ADS の Export Citation -> BibTeX で出てくるものを、そのまま貼り付ける。
+%% 手で打ち直すと必ずどこかで間違える。
+%%   https://ui.adsabs.harvard.edu/
+%%
+%% 引用キー（各項目の 1 行目、著者名の手前にあるラベル）は
+%% 自分で分かりやすいものに変えてよい。「著者姓＋西暦」で統一すると探しやすい。
+%%
+%% 注意：BibTeX は「%」で始まる行もコメントとして読み飛ばしません。
+%% アットマークを含む文字列をコメントに書くと、そこから新しい項目が
+%% 始まったと誤解してエラーになります。書かないこと。
+
+@article{hotta2021,
+  author  = {{Hotta}, H. and {Kusano}, K.},
+  title   = {Solar differential rotation reproduced with high-resolution simulation},
+  journal = {Nature Astronomy},
+  year    = 2021,
+  volume  = 5,
+  pages   = {1100--1102},
+  doi     = {10.1038/s41550-021-01459-0}
+}
+
+@article{charbonneau2020,
+  author  = {{Charbonneau}, P.},
+  title   = {Dynamo models of the solar cycle},
+  journal = {Living Reviews in Solar Physics},
+  year    = 2020,
+  volume  = 17,
+  number  = 1,
+  pages   = {4},
+  doi     = {10.1007/s41116-020-00025-6}
+}
+
+@article{christensen-dalsgaard1991,
+  author  = {{Christensen-Dalsgaard}, J. and {Gough}, D.~O. and {Thompson}, M.~J.},
+  title   = {The Depth of the Solar Convection Zone},
+  journal = {The Astrophysical Journal},
+  year    = 1991,
+  volume  = 378,
+  pages   = {413},
+  doi     = {10.1086/170441}
+}
+
+%% 日本語の文献もそのまま書ける（LuaLaTeX なので文字化けしない）。
+@book{shibata2011,
+  author    = {柴田 一成 and 上出 洋介},
+  title     = {総解説 現代の太陽と太陽面爆発},
+  publisher = {丸善出版},
+  year      = 2011
+}

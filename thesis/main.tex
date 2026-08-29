@@ -1,0 +1,208 @@
+%% ===========================================================================
+%%  修士論文テンプレート（堀田グループ）
+%%
+%%  エンジンは LuaLaTeX です。このディレクトリで
+%%      latexmk
+%%  とすれば main.pdf ができます（-pvc をつけると保存のたびに作り直す）。
+%%  Overleaf では Menu -> Settings -> Compiler を LuaLaTeX にしてください。
+%%
+%%  ファイルはこれだけです。
+%%      main.tex        このファイル。設定・表紙情報・概要・章の並び
+%%      body.tex        本文（序論〜結論）
+%%      guide.tex       執筆の手引き。書き終わったら外してよい
+%%      thesis.bib      引用文献
+%%      achilles.sty    全テンプレート共通のプリアンブル
+%%      thesiscover.sty 表紙のレイアウト。通常は触らない
+%%
+%%  卒業論文に使うときは、下の \thesistype を「卒業論文」に変えます。
+%% ===========================================================================
+
+%% ltjsbook = jsbook の LuaLaTeX 版。
+%% twoside / openright は両面印刷・章は奇数ページ始まりという指定です。
+%% 片面で印刷するなら [a4paper,11pt,oneside] にしてください。
+\documentclass[a4paper,11pt,twoside,openright]{ltjsbook}
+
+
+%% ===========================================================================
+%%  1. 参考文献の方式（どちらか一方だけを有効にする）
+%% ---------------------------------------------------------------------------
+%%   biblatex + biber : .bib をそのまま使え、日本語文献も UTF-8 で素直に通る。
+%%   natbib  + bst    : 天文分野で使われてきた aasjournalv7.bst をそのまま使う。
+%%  本文の書き方（\citep{} / \citet{}）はどちらでも同じです。
+%%  切り替えたら、いちど latexmk -C で中間ファイルを消してから作り直すこと。
+%% ===========================================================================
+\def\BibStyleBiblatex{}     % ← 既定
+%\def\BibStyleNatbib{}      % ← こちらを使うときは上の行をコメントアウトする
+
+
+%% ===========================================================================
+%%  2. パッケージと設定
+%% ===========================================================================
+
+%% 共通プリアンブル（フォント・数式・図・単位・マクロ）。
+%% 中身は achilles.sty を見てください。全テンプレートで共通です。
+%% 余白と hyperref はこの下で論文用に設定するので、ここでは外しておく。
+\usepackage[nogeometry,nohyperref]{achilles}
+
+%% 版面。ltjsbook の既定は余白が広いので詰め、両面印刷でのど側を広めに取る。
+\usepackage[a4paper,inner=30truemm,outer=22truemm,top=25truemm,bottom=25truemm]{geometry}
+
+%% 図表
+%% caption は ltjsbook を知らないので
+%%   Package caption Warning: Unknown document class ...
+%% という警告を必ず出しますが、実害はありません。無視してください。
+\usepackage{caption}
+\usepackage{subcaption}      % 図(a)(b) を並べる
+\captionsetup{font=small,labelfont=bf}
+\captionsetup[sub]{font=small,labelformat=parens,labelfont=bf,%
+                   justification=raggedright,singlelinecheck=false}
+\usepackage{longtable}       % 何ページにもわたる表
+\usepackage{pdflscape}       % 横長の表を 90 度回して 1 ページに収める
+\graphicspath{{fig/}}        % \includegraphics{foo} で fig/foo を探す
+
+%% 目次
+\usepackage[nottoc,notlot,notlof]{tocbibind}   % 引用文献を目次に載せる
+\setcounter{tocdepth}{2}      % 目次に出すのは節まで
+\setcounter{secnumdepth}{3}   % 番号を振るのは小節まで
+
+%% 参考文献の実体
+\ifdefined\BibStyleBiblatex
+  \usepackage[backend=biber,
+              style=authoryear,
+              natbib=true,        % \citep \citet を使えるようにする
+              maxcitenames=2,     % 3 人以上は「Hotta et al.」
+              maxbibnames=99,     % 文献リストでは全員書く
+              giveninits=true,    % 名は頭文字だけ
+              uniquename=init,
+              sorting=nyt,
+              doi=false,isbn=false,url=false,eprint=false,
+              backref=false]{biblatex}
+  \addbibresource{thesis.bib}
+\else
+  \usepackage{natbib}
+  \setcitestyle{authoryear,round,aysep={},citesep={;}}
+\fi
+
+%% リンク。LuaLaTeX なので日本語のしおりはそのまま通る（pxjahyper は不要）。
+%% 紙で提出する版は下の行と入れ替えて文字を黒にすること。
+\usepackage[unicode,colorlinks=true,allcolors=blue,pdfencoding=auto]{hyperref}
+%\usepackage[unicode,colorlinks=false,pdfencoding=auto]{hyperref}  % 印刷用
+\usepackage{url}
+
+%% 表紙
+\usepackage{thesiscover}
+
+%% 添削のときだけ使うもの。行番号を振ると「12 行目のここ」と指摘しやすくなる。
+%% 事務に提出する版では必ずコメントアウトすること。
+%\usepackage{lineno}
+%\linenumbers
+
+%% この論文だけで使うマクロはここに書く。
+%% 他のテンプレートでも使いたくなったら common/achilles.sty に移して
+%% ./tools/sync-common.sh を実行する。
+\newcommand{\Rsunval}{6.96\times10^{8}~\mathrm{m}}
+
+
+%% ===========================================================================
+%%  3. 表紙に載る情報（ここは各自書き換える）
+%%     ★ 所属の正式名称は指導教員に確認すること。学務に出す書類と表記を揃える。
+%% ===========================================================================
+\thesistype{修士論文}          % 卒業論文なら「卒業論文」に変える
+\nendo{2026}                   % 年度（西暦）
+\seifuku{}                     % 「正本」「副本」など。不要なら空のまま
+
+\title{ここに論文の題目を書く\\（長いときは \texttt{\textbackslash\textbackslash} で改行できる）}
+\titleen{}                     % 英語題目が必要なら書く。不要なら空のまま
+\author{名字 名前}
+\date{\today}                  % 提出日を固定したいなら \date{2027年1月20日} のように
+
+\university{名古屋大学大学院}
+\graduateschool{理学研究科}
+\department{理学専攻 物理科学領域}
+\labname{}                     % 研究室名。入れない慣習なら空のまま
+\course{博士前期課程2年}
+\studentid{}                   % 学籍番号
+
+\supervisor{堀田 英之}
+\cosupervisor{}                % 副指導教員。不要なら空のまま
+
+
+%% ===========================================================================
+%%  4. 本文
+%% ===========================================================================
+\begin{document}
+
+%% --- 前付け（ページ番号がローマ数字になる） -------------------------------
+\frontmatter
+
+\maketitle
+\thispagestyle{empty}
+
+%% 概要（アブストラクト）
+%%
+%% 最後に書きます。ただし「最後に書く」のは順番の話であって、
+%% 手を抜いていいという意味ではありません。審査員が最初に読むのはここです。
+%% 1 ページ以内、次の 5 つを各 1〜3 文で。
+%%   (1) 背景：この分野で何が分かっていないのか
+%%   (2) 問題：そのうち本研究が扱うのはどれか
+%%   (3) 方法：何をどう調べたか
+%%   (4) 結果：何が分かったか（数値を入れる）
+%%   (5) 意義：それで (1) がどう前進したか
+%% 「〜について調べた」で終わらせないこと。何が分かったのかを書きます。
+\chapter*{概要}
+\addcontentsline{toc}{chapter}{概要}
+
+太陽対流層の熱輸送は、恒星の内部構造と磁場生成の両方を規定する基本過程である。
+しかし数値計算で得られる大規模対流の速度振幅は観測より一桁大きく、
+対流複共役問題（convective conundrum）と呼ばれている。
+本研究では、\todo{ここに本研究で行ったことを書く}。
+その結果、\todo{ここに得られた結果を数値とともに書く}ことが分かった。
+これは\todo{ここに意義を書く}を示唆する。
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+%% --- 本文（ページ番号がアラビア数字に戻る） -------------------------------
+\mainmatter
+
+\input{body}
+
+%% 執筆の手引き。自分の原稿が形になったら、この行をコメントアウトする。
+\input{guide}
+
+%% --- 付録 -----------------------------------------------------------------
+%% 本文に入れると流れが切れるが、再現には必要なもの（長い式変形、数値スキームの
+%% 詳細、解像度テスト、スクリプトなど）を置く。不要ならこの 3 行ごと消してよい。
+\appendix
+\chapter{数値スキームの詳細}
+\label{chap:appendix}
+\todo{必要なら書く}
+
+%% --- 謝辞 -----------------------------------------------------------------
+\backmatter
+\chapter{謝辞}
+
+%% 世話になった人にきちんと礼を書きます。形式的でよいので、抜けがないように。
+%% 指導教員、共同研究者、議論に付き合ってくれた人、計算資源やデータの提供元、
+%% 経済的支援（学振・奨学金・研究費）。
+%% 計算機や観測データには謝辞の定型文が指定されている場合があります
+%% （例：スーパーコンピュータ「富岳」、ひので、SDO など）。使う前に確認すること。
+\todo{書く}
+
+%% --- 引用文献 -------------------------------------------------------------
+\ifdefined\BibStyleBiblatex
+  \printbibliography[title={引用文献}]
+\else
+  \renewcommand{\bibname}{引用文献}
+  %% plainnat は TeX Live / Overleaf に必ず入っており、
+  %% 「(Charbonneau 2020)」「Hotta and Kusano (2021)」と素直に出ます。
+  %% AAS 誌の体裁に寄せたいときは aasjournalv7 に変えてもよいですが、
+  %% 本文の引用が「(P. Charbonneau 2020)」とイニシャル付きになります。
+  %% 分野で使われている .bst があれば、このディレクトリに置けばそのまま使えます。
+  \bibliographystyle{plainnat}
+  %\bibliographystyle{aasjournalv7}
+  \bibliography{thesis}
+\fi
+
+\end{document}

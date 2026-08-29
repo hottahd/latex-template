@@ -1,0 +1,129 @@
+%% achilles.sty --- 堀田グループ LaTeX テンプレート共通プリアンブル
+%%
+%%   *** このファイルの原本は common/achilles.sty です ***
+%%   thesis/ exam/ note/ にあるものはコピーです。編集したら
+%%       ./tools/sync-common.sh
+%%   を実行して配り直してください（tools/sync-common.sh --check でずれを検査）。
+%%
+%% エンジンは LuaLaTeX 専用です。ltjsbook / ltjsarticle / ltjarticle と
+%% 組み合わせて使います。uplatex や platex では動きません。
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{achilles}[2026/08/28 v1.0 Hotta group common preamble for LuaLaTeX]
+
+%% ---------------------------------------------------------------------------
+%% オプション
+%%   nogeometry : 余白を achilles 側で設定しない（自分で geometry を書くとき）
+%%   nohyperref : hyperref を読み込まない（順序を自分で制御したいとき）
+%% ---------------------------------------------------------------------------
+\newif\ifach@geometry \ach@geometrytrue
+\newif\ifach@hyperref \ach@hyperreftrue
+\DeclareOption{nogeometry}{\ach@geometryfalse}
+\DeclareOption{nohyperref}{\ach@hyperreffalse}
+\ProcessOptions\relax
+
+%% ---------------------------------------------------------------------------
+%% 数式と欧文フォント
+%%   読み込む順番に意味があります。amsmath -> newtx -> bm の順にすること。
+%%   newtxmath は amssymb の記号（\lesssim, \mathbb など）も含むので、
+%%   amssymb を別に読むと \Bbbk が二重定義になって止まります。読まないこと。
+%%
+%%   和文は luatexja が原ノ味フォントを自動で使います。TeX Live / MacTeX さえ
+%%   入れれば Mac / Windows / Linux のどれでも同じ字面になります。
+%%   欧文は Times 系（本文）と Helvetica 系（見出し）。
+%%   helvratio は和文とのバランス調整です。
+%% ---------------------------------------------------------------------------
+\RequirePackage{amsmath}
+\RequirePackage{mathtools}   % \coloneqq, \DeclarePairedDelimiter など
+\RequirePackage[T1]{fontenc}
+\RequirePackage[scaled=1.05,helvratio=0.95]{newtxtext}
+%% \mathscr{} は newtxmath が用意しているので mathrsfs.sty は読まない。
+%% mathrsfs.sty は 5/7/10pt しか持たず、和文クラスの 10.5pt で
+%% サイズ置換の警告を出し続けるため。
+\RequirePackage{newtxmath}
+\RequirePackage{bm}          % \bm{B} : 太字ベクトル
+
+%% ---------------------------------------------------------------------------
+%% 単位・化学式
+%%   siunitx を使うと \qty{700}{Mm} や \unit{km.s^{-1}} と書けます。
+%%   従来どおり $\mathrm{km~s^{-1}}$ と手書きしても構いません。
+%% ---------------------------------------------------------------------------
+\RequirePackage{siunitx}
+\sisetup{
+  per-mode        = symbol,       % km/s のようにスラッシュで出す
+  range-units     = single,
+  separate-uncertainty = true,
+  detect-all,                     % 周囲のフォントに合わせる
+}
+\DeclareSIUnit{\Mm}{Mm}
+\DeclareSIUnit{\erg}{erg}
+\DeclareSIUnit{\gauss}{G}
+\DeclareSIUnit{\Msun}{M_\odot}
+\DeclareSIUnit{\Rsun}{R_\odot}
+\DeclareSIUnit{\Lsun}{L_\odot}
+
+%% ---------------------------------------------------------------------------
+%% 図・表・色
+%% ---------------------------------------------------------------------------
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{booktabs}    % \toprule \midrule \bottomrule
+\RequirePackage{array}
+\RequirePackage{multirow}
+\RequirePackage{wrapfig}
+
+%% ---------------------------------------------------------------------------
+%% 箇条書き
+%% ---------------------------------------------------------------------------
+\RequirePackage{enumitem}
+
+%% ---------------------------------------------------------------------------
+%% 余白
+%% ---------------------------------------------------------------------------
+\ifach@geometry
+  \RequirePackage[margin=25truemm]{geometry}
+\fi
+
+%% ---------------------------------------------------------------------------
+%% リンク
+%%   LuaLaTeX では日本語のしおりがそのまま通るので pxjahyper は不要です。
+%%   紙で提出するときは colorlinks=false にすると文字が黒くなります。
+%% ---------------------------------------------------------------------------
+\ifach@hyperref
+  \RequirePackage[unicode,colorlinks=true,allcolors=blue,pdfencoding=auto]{hyperref}
+  \RequirePackage{url}
+\fi
+
+%% ---------------------------------------------------------------------------
+%% よく使うマクロ
+%% ---------------------------------------------------------------------------
+% 執筆中のメモ。提出前に \red などが残っていないか grep すること。
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+% \todo{...} は赤い [TODO: ...] として本文に出る。消し忘れ防止のため目立たせている。
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+
+% ベクトル・テンソル
+\newcommand{\vect}[1]{\bm{#1}}
+\newcommand{\uvect}[1]{\bm{e}_{#1}}          % \uvect{\phi} -> e_phi
+\newcommand{\grad}{\nabla}
+\newcommand{\divergence}{\nabla\cdot}
+\newcommand{\curl}{\nabla\times}
+\newcommand{\lap}{\nabla^2}
+
+% 微分
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\diff}[2]{\frac{\dd #1}{\dd #2}}
+\newcommand{\pdif}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pdifn}[3]{\frac{\partial^{#3} #1}{\partial #2^{#3}}}
+
+% 天体・分野でよく出るもの
+\newcommand{\Msunsym}{M_\odot}
+\newcommand{\Rsunsym}{R_\odot}
+\newcommand{\eg}{e.g.}
+\newcommand{\ie}{i.e.}
+
+% 単位を立体で書くための短縮（siunitx を使わない場合）
+\newcommand{\unitsym}[1]{\,\mathrm{#1}}
+
+\endinput

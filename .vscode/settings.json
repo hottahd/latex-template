@@ -1,0 +1,54 @@
+{
+  // ------------------------------------------------------------------
+  // VS Code + LaTeX Workshop の設定
+  //
+  // 拡張機能「LaTeX Workshop」(James Yu) を入れてから、
+  // このリポジトリを VS Code で開いてください。
+  //   - .tex を保存すると自動でコンパイルされます
+  //   - Ctrl/Cmd + Alt + J で PDF の該当箇所に飛べます（SyncTeX）
+  //   - PDF 側を Ctrl/Cmd + クリックすると .tex の該当行に戻れます
+  // ------------------------------------------------------------------
+
+  // エンジンは LuaLaTeX。各テンプレートの latexmkrc と同じ設定にしてある。
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk (lualatex)",
+      "command": "latexmk",
+      "args": [
+        "-lualatex",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {}
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    { "name": "latexmk (lualatex)", "tools": ["latexmk (lualatex)"] }
+  ],
+
+  // PDF は .tex と同じディレクトリに出す
+  "latex-workshop.latex.outDir": "%DIR%",
+
+  // thesis/ exam/ note/ のそれぞれの main.tex を独立した文書として扱う。
+  // 各ファイルの先頭の「% !TEX root = main.tex」でも指定してある。
+  "latex-workshop.latex.search.rootFiles.include": ["*/main.tex"],
+
+  // 保存したら組み直す
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  // 中間ファイルは勝手に消さない（latexmk が差分ビルドに使うため）
+  "latex-workshop.latex.autoClean.run": "never",
+
+  // PDF はエディタのタブで開く
+  "latex-workshop.view.pdf.viewer": "tab",
+
+  // 文字コードは UTF-8。改行コードは LF に揃える。
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "[latex]": {
+    "editor.wordWrap": "on",
+    "editor.tabSize": 2
+  }
+}

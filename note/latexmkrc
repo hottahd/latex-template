@@ -1,0 +1,35 @@
+# latexmk の設定（LuaLaTeX 用）
+#
+#   *** 原本は common/latexmkrc です。編集したら ./tools/sync-common.sh ***
+#
+# 使い方:
+#   latexmk            main.pdf を作る
+#   latexmk -pvc       ファイルを保存するたびに作り直す
+#   latexmk -c         中間ファイルを消す（PDF は残す）
+#   latexmk -C         中間ファイルと PDF を消す
+#
+# Overleaf ではこのファイルも読まれますが、確実を期すため
+# メニュー -> Settings -> Compiler を「LuaLaTeX」にしてください。
+
+# 引数なしで latexmk と打ったときに作るもの。
+# これを書いておかないと、latexmk はディレクトリ内のすべての .tex を
+# 単独で組もうとして、本文だけのファイルでエラーになります。
+@default_files = ('main.tex');
+
+$lualatex = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error %O %S';
+$pdf_mode = 4;          # 4 = lualatex で直接 PDF を作る
+$postscript_mode = 0;
+$dvi_mode = 0;
+
+# 参考文献
+#   biblatex を使うと .bcf ができ、latexmk が自動で biber を呼びます。
+#   natbib + bst を使う場合は upbibtex が呼ばれます（UTF-8 の日本語文献も通る）。
+$bibtex = 'upbibtex %O %S';
+$biber  = 'biber %O %S';
+$bibtex_use = 2;        # .bbl がなければ bibtex/biber を走らせ、clean 時も消す
+
+# 索引を使う場合
+$makeindex = 'upmendex %O -o %D %S';
+
+$max_repeat = 5;
+$ENV{TZ} = 'Asia/Tokyo';

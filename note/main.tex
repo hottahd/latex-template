@@ -1,0 +1,115 @@
+%% ===========================================================================
+%%  研究ノート・講義ノート用テンプレート（堀田グループ）
+%%
+%%  エンジンは LuaLaTeX です。このディレクトリで
+%%      latexmk        PDF を作る
+%%      latexmk -pvc   保存するたびに作り直す（書きながら使うならこれ）
+%%
+%%  ノートは「あとで自分が読み返して分かること」が目的なので、
+%%  日付と、どこまで確かめたのかを残しておくと後で助かります。
+%% ===========================================================================
+
+\documentclass[a4paper,11pt]{ltjsarticle}
+
+%% 共通プリアンブル（フォント・数式・図・単位・マクロ）。
+%% 中身は achilles.sty を見てください。全テンプレートで共通です。
+\usepackage[nogeometry]{achilles}
+\usepackage[margin=22truemm]{geometry}
+
+%% newtxmath が \openbox を定義済みなので、そのままだと amsthm と衝突する。
+%% 証明終わりの記号は amsthm 側の定義を使うので、先に消しておく。
+\let\openbox\relax
+\usepackage{amsthm}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+%% 式番号は節ごとに 1.1, 1.2 と振る
+\numberwithin{equation}{section}
+
+%% --- 定理・定義などの環境 -------------------------------------------------
+\theoremstyle{definition}
+\newtheorem{teigi}{定義}[section]
+\newtheorem{teiri}[teigi]{定理}
+\newtheorem{rei}[teigi]{例}
+\theoremstyle{remark}
+\newtheorem*{chui}{注意}
+
+%% --- 覚え書き用の箱 -------------------------------------------------------
+%% \begin{memo}{見出し} ... \end{memo}
+%% 「なぜこうしたのか」「ここで詰まった」を書き残すのに使う。
+\newtcolorbox{memo}[1][]{breakable,colback=yellow!6,colframe=yellow!50!black,
+  fonttitle=\bfseries\small,title={#1},left=5pt,right=5pt}
+
+%% --- 未確認の事項 ---------------------------------------------------------
+%% achilles.sty の \todo{} と同じく、消し忘れを防ぐため目立たせている。
+%% あとで grep して回収する。
+\newcommand{\yokakunin}[1]{\textcolor{orange}{\textbf{[要確認: #1]}}}
+
+\title{ノートの表題}
+\author{堀田 英之}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+%% 節が増えてきたら目次を出す。要らなければこの行を消す。
+\tableofcontents
+
+\section{はじめに}
+
+このノートで何を確かめたいのかを最初に一行で書いておく。
+半年後の自分は、何を考えていたか覚えていない。
+
+\begin{memo}[この日の目的]
+  対流層の熱輸送で、混合距離理論の予言と数値計算がどこでずれるのかを整理する。
+\end{memo}
+
+\section{式の展開}
+
+\begin{teigi}[エントロピー勾配]
+  超断熱度を
+  \begin{align}
+    \delta \equiv \nabla - \nabla_\mathrm{ad}
+  \end{align}
+  で定義する。
+\end{teigi}
+
+対流によるエンタルピー流束は
+\begin{align}
+  F_\mathrm{conv} = \rho c_p \overline{u_r T'}
+  \label{eq:fconv}
+\end{align}
+と書ける。式\eqref{eq:fconv}の右辺を混合距離理論で評価すると
+\begin{align}
+  F_\mathrm{conv} \sim \rho u_r^3
+\end{align}
+となる。
+
+\begin{chui}
+  ここでは密度成層を無視した。実際の太陽では
+  $\rho$ が対流層内で 6 桁変わるので、この近似は表面近くで破綻する。
+\end{chui}
+
+\yokakunin{係数の $1/2$ がどこから来るか、Kippenhahn の教科書で確認する}
+
+\section{数値の確認}
+
+\begin{rei}[太陽の対流速度]
+  $F_\odot = \qty{6.3e7}{\watt\per\meter\squared}$、
+  $\rho = \qty{0.2}{\kg\per\meter\cubed}$ とすると
+  $u_r \sim (F_\odot/\rho)^{1/3} \simeq \qty{700}{\meter\per\second}$ となり、
+  観測される粒状斑の速度と同程度である。
+\end{rei}
+
+\section{図を貼る}
+
+%% 画像はこのディレクトリか fig/ に置く。
+%% LuaLaTeX が読めるのは PDF・PNG・JPEG。EPS は先に PDF へ変換しておく。
+%\begin{figure}[tb]
+%  \centering
+%  \includegraphics[width=0.7\linewidth]{foo.pdf}
+%  \caption{図の説明。}
+%  \label{fig:foo}
+%\end{figure}
+
+\end{document}

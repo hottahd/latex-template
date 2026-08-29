@@ -1,0 +1,38 @@
+# LaTeX の中間ファイル（latexmk -c / -C で消えるもの）
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+*.vrb
+*.xdv
+*.dvi
+*-blx.bib
+comment.cut
+
+# 出来上がった PDF は履歴に入れない（fig/ の図は残す）
+/thesis/main.pdf
+/exam/main.pdf
+/note/main.pdf
+main-diff*.tex
+main-diff*.pdf
+
+# エディタ・OS
+.DS_Store
+*~
+*.swp
+.vscode/*
+!.vscode/settings.json
