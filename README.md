@@ -247,6 +247,15 @@ push の時点で知る**ことです。手元だけで確認していると、
 
 手動で走らせたいときは Actions のページの **Run workflow** から実行できます。
 
+## ライセンス
+
+MIT License（`LICENSE`）。自由に使ってください。改変も再配布も構いません。
+
+研究室 Overleaf のテンプレートでは、ライセンスの選択肢が
+Creative Commons CC BY 4.0 / LaTeX Project Public License 1.3c / Other の 3 つしか
+ないので、**Other (as stated in the work)** を選んでいます。実際のライセンスは
+この `LICENSE` に書いてあるものです。
+
 ## 困ったとき
 
 * **エラーが出たら `main.log` を上から読む。** 後ろのエラーは前のエラーの
